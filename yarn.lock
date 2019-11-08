@@ -471,9 +471,8 @@ balanced-match@^1.0.0:
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
   integrity sha1-ibTRmasr7kneFk6gK4nORi1xt2c=
 
-"base-service@https://git.solazu.net/enterprise/crm/libs/base-service.git":
+"base-service@file:../base-service":
   version "1.0.0"
-  resolved "https://git.solazu.net/enterprise/crm/libs/base-service.git#9996806bd38bb5ce24c847a840e9dc392da96b82"
   dependencies:
     "@types/dotenv" "^8.2.0"
     "@types/winston" "^2.4.4"

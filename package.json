@@ -32,7 +32,7 @@
     "typescript": "^3.2.2"
   },
   "dependencies": {
-    "base-service": "https://git.solazu.net/enterprise/crm/libs/base-service.git",
+    "base-service": "E:/MyProject/base-service",
     "dotenv": "^8.2.0",
     "ioredis": "^4.2.0",
     "moleculer": "^0.13.0",
