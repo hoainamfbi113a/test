@@ -4,9 +4,9 @@
   "description": "My Moleculer microservices project",
   "scripts": {
     "build": "tsc",
-    "dev": "ts-node ./node_modules/moleculer/bin/moleculer-runner.js --hot --repl --config moleculer.config.ts services/**/*.service.ts",
+    "dev": "ts-node -r tsconfig-paths/register ./node_modules/moleculer/bin/moleculer-runner.js --hot --repl --config moleculer.config.ts services/**/*.service.ts",
     "cli": "moleculer connect NATS --id=gateway",
-    "start": "moleculer-runner services",
+    "start": "TS_NODE_PROJECT=tsconfig.production.json node -r tsconfig-paths/register ./node_modules/moleculer/bin/moleculer-runner.js dist/services",
     "ci": "jest --watch",
     "test": "jest --coverage",
     "lint": "tslint -p tsconfig.json",
@@ -32,13 +32,15 @@
     "typescript": "^3.2.2"
   },
   "dependencies": {
-    "base-service": "E:/MyProject/base-service",
+    "base-service": "https://git.solazu.net/enterprise/crm/libs/base-service.git",
     "dotenv": "^8.2.0",
     "ioredis": "^4.2.0",
     "moleculer": "^0.13.0",
+    "moleculer-decorators": "^1.0.21",
     "moleculer-web": "^0.8.0",
     "nats": "^1.0.1",
     "reflect-metadata": "^0.1.13",
+    "tsconfig-paths": "^3.9.0",
     "uuid": "^3.3.3"
   },
   "engines": {
