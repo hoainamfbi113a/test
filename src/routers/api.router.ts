@@ -6,9 +6,5 @@ export const apiRouter = {
         "**",
     ],
     // tslint:disable-next-line:object-literal-sort-keys
-    authentication: true,
-    // Call before `broker.call`
-    async onBeforeCall(ctx: any, route: any, req: any, res: any) {
-        return await middlewares.authentication(ctx, route, req, res);
-    },
+    authentication: true
 };

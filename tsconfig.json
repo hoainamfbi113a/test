@@ -17,11 +17,30 @@
     "declaration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "allowJs": true
+    "allowJs": true,
+    "paths": {
+      "Interfaces/*": [
+        "src/interfaces/*"
+      ],
+      "Interfaces": [
+        "src/interfaces/"
+      ],
+      "BaseService/*": [
+        "node_modules/base-service/dist/*"
+      ],
+      "BaseService": [
+        "node_modules/base-service/dist"
+      ]
+    }
   },
   "exclude": [
     "node_modules",
     "test"
+  ],
+  "include": [
+    "./src/**/*.ts",
+    "./services/**/*.ts",
+    "./test/**/*.ts"
   ],
   "lib": ["es2017", "dom", "es2015"]
 }

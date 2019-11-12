@@ -1,14 +1,12 @@
-import { ServiceSchema } from "moleculer";
+import {ServiceMethods, ServiceSchema, ServiceSettingSchema} from "moleculer";
 import ApiGateway = require("moleculer-web");
 import {routers} from "../src/routers";
+import middlewares from "../src/middlewares";
 
-const ApiService: ServiceSchema = {
-	name: "api",
-
-	mixins: [ApiGateway],
-
-	// More info about settings: https://moleculer.services/docs/0.13/moleculer-web.html
-	settings: {
+class ApiService implements ServiceSchema {
+	public name: string = "api";
+	public mixins: Array<ServiceSchema> = [ApiGateway];
+	public settings: ServiceSettingSchema = {
 		port: process.env.PORT || 3000,
 		// Global CORS settings
 		cors: {
@@ -25,7 +23,18 @@ const ApiService: ServiceSchema = {
 		assets: {
 			folder: "public",
 		},
+		// Global error handler
+		onError(req: any, res: any, err: any) {
+			res.setHeader("Content-Type", "text/plain");
+			res.writeHead(err.code || 500);
+			res.end("Global error: " + err.message);
+		}
+	};
 
-	},
-};
-export = ApiService;
+	public methods: ServiceMethods = {
+		async authenticate(ctx: any, route: any, req: any, res: any) {
+			return await middlewares.authentication(ctx, route, req, res);
+		}
+	}
+}
+module.exports =  new ApiService();

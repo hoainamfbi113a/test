@@ -21,7 +21,7 @@
             "off"
         ],
         "no-unused-vars": [
-            "warn"
+            "off"
         ],
         "no-mixed-spaces-and-tabs": [
             "warn"

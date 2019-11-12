@@ -4,7 +4,7 @@
   "description": "My Moleculer microservices project",
   "scripts": {
     "build": "tsc",
-    "dev": "ts-node -r tsconfig-paths/register ./node_modules/moleculer/bin/moleculer-runner.js --hot --repl --config moleculer.config.ts services/**/*.service.ts",
+    "dev": "yarn update-base-service && ts-node -r tsconfig-paths/register ./node_modules/moleculer/bin/moleculer-runner.js --hot --repl --config moleculer.config.ts services/**/*.service.ts",
     "cli": "moleculer connect NATS --id=gateway",
     "start": "TS_NODE_PROJECT=tsconfig.production.json node -r tsconfig-paths/register ./node_modules/moleculer/bin/moleculer-runner.js dist/services",
     "ci": "jest --watch",
@@ -12,7 +12,7 @@
     "lint": "tslint -p tsconfig.json",
     "dc:up": "docker-compose up --build -d",
     "dc:down": "docker-compose down",
-    "migration:create": "yarn typeorm:cli migration:create  -n initdb"
+    "update-base-service": "yarn add https://git.solazu.net/enterprise/crm/libs/base-service.git"
   },
   "keywords": [
     "microservices",
