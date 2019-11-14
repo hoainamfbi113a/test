@@ -19,9 +19,9 @@
     js-tokens "^4.0.0"
 
 "@types/bluebird@^3.5.24":
-  version "3.5.28"
-  resolved "https://registry.yarnpkg.com/@types/bluebird/-/bluebird-3.5.28.tgz#04c1a520ff076649236bc8ca21198542ce2bdb09"
-  integrity sha512-0Vk/kqkukxPKSzP9c8WJgisgGDx5oZDbsLLWIP5t70yThO/YleE+GEm2S1GlRALTaack3O7U5OS5qEm7q2kciA==
+  version "3.5.29"
+  resolved "https://registry.yarnpkg.com/@types/bluebird/-/bluebird-3.5.29.tgz#7cd933c902c4fc83046517a1bef973886d00bdb6"
+  integrity sha512-kmVtnxTuUuhCET669irqQmPAez4KFnFVKvpleVRyfC3g+SHD1hIkFZcWLim9BVcwUBLO59o8VZE4yGCmTif8Yw==
 
 "@types/dotenv@^8.2.0":
   version "8.2.0"
@@ -478,7 +478,7 @@ balanced-match@^1.0.0:
 
 "base-service@https://git.solazu.net/enterprise/crm/libs/base-service.git":
   version "1.0.0"
-  resolved "https://git.solazu.net/enterprise/crm/libs/base-service.git#da886cd81b2ed57032e4e64c67c74f233c5abe10"
+  resolved "https://git.solazu.net/enterprise/crm/libs/base-service.git#b3340acd5ed228af56f90e04ba58e4f507262922"
   dependencies:
     "@types/dotenv" "^8.2.0"
     "@types/winston" "^2.4.4"

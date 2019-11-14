@@ -32,6 +32,7 @@ class Middleware {
                 ctx.meta.isAuthencated = true;
                 ctx.meta.userInfo = user;
                 ctx.meta.orgInfo = org;
+                ctx.meta.test = "456";
             }
             modelUser.DB.destroy();
             modelOrg.DB.destroy();
