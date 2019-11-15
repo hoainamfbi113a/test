@@ -18,29 +18,27 @@ npm install typeorm -g
 ```
 {
 	"version": "0.2.0",
-	"configurations": [
-		{
-			"type": "node",
-			"request": "launch",
-			"name": "Debug",
-			"program": "${workspaceRoot}/node_modules/moleculer/bin/moleculer-runner.js",
-			"sourceMaps": true,
-			"runtimeArgs": [
-					"--nolazy",
-					"-r",
-					"ts-node/register",
-					"-r",
-          "tsconfig-paths/register"
-			],
-			"cwd": "${workspaceRoot}",
-			"args": [
-					"--hot",
-					"--repl",
-					"--config",
-					"moleculer.config.ts",
-					"services/**/*.service.ts"
-			]
-	}
-	]
+	"configurations": [{
+		"type": "node",
+		"request": "launch",
+		"name": "Debug",
+		"program": "${workspaceRoot}/service-core/node_modules/moleculer/bin/moleculer-runner.js",
+		"sourceMaps": true,
+		"runtimeArgs": [
+			"--nolazy",
+			"-r",
+			"ts-node/register",
+			"-r",
+			"tsconfig-paths/register"
+		],
+		"cwd": "${workspaceRoot}/service-core",
+		"args": [
+			"--hot",
+			"--repl",
+			"--config",
+			"moleculer.config.ts",
+			"services/**/*.service.ts"
+		]
+	}]
 }
  ```
