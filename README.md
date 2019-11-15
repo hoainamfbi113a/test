@@ -13,3 +13,34 @@ npm install typeorm -g
 - `npm test` - Run tests & generate coverage report
 - `npm run dc:up`: Start the stack with Docker Compose
 - `npm run dc:down`: Stop the stack with Docker Compose
+
+## VSCode Debug (Note: Workspace root directory maybe different among computers)
+```
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Debug",
+			"program": "${workspaceRoot}/node_modules/moleculer/bin/moleculer-runner.js",
+			"sourceMaps": true,
+			"runtimeArgs": [
+					"--nolazy",
+					"-r",
+					"ts-node/register",
+					"-r",
+          "tsconfig-paths/register"
+			],
+			"cwd": "${workspaceRoot}",
+			"args": [
+					"--hot",
+					"--repl",
+					"--config",
+					"moleculer.config.ts",
+					"services/**/*.service.ts"
+			]
+	}
+	]
+}
+ ```
