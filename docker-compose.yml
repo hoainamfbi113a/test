@@ -4,7 +4,7 @@ services:
   api:
     build:
       context: .
-    image: service-core-api
+    image: service-core
     env_file: docker-compose.env
     environment:
       SERVICES: api
@@ -25,7 +25,7 @@ services:
   auth:
     build:
       context: .
-    image: service-core-auth
+    image: service-core
     env_file: docker-compose.env
     environment:
       SERVICES: auth
@@ -39,7 +39,7 @@ services:
   org:
     build:
       context: .
-    image: service-core-org
+    image: service-core
     env_file: docker-compose.env
     environment:
       SERVICES: org
@@ -53,7 +53,7 @@ services:
   user:
     build:
       context: .
-    image: service-core-user
+    image: service-core
     env_file: docker-compose.env
     environment:
       SERVICES: user
