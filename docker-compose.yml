@@ -1,11 +1,10 @@
 version: "3.0"
 
 services:
-
   api:
     build:
       context: .
-    image: moleculer-demo-ts
+    image: service-core-api
     env_file: docker-compose.env
     environment:
       SERVICES: api
@@ -23,13 +22,41 @@ services:
       - "traefik.frontend.entryPoints=http"
       - "traefik.frontend.rule=PathPrefix:/"
 
-  greeter:
+  auth:
     build:
       context: .
-    image: moleculer-demo-ts
+    image: service-core-auth
     env_file: docker-compose.env
     environment:
-      SERVICES: greeter
+      SERVICES: auth
+    links:
+      - nats
+      - redis
+    depends_on:
+      - nats
+      - redis
+
+  org:
+    build:
+      context: .
+    image: service-core-org
+    env_file: docker-compose.env
+    environment:
+      SERVICES: org
+    links:
+      - nats
+      - redis
+    depends_on:
+      - nats
+      - redis
+
+  user:
+    build:
+      context: .
+    image: service-core-user
+    env_file: docker-compose.env
+    environment:
+      SERVICES: user
     links:
       - nats
       - redis
