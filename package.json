@@ -1,5 +1,5 @@
 {
-  "name": "moleculer-demo-ts",
+  "name": "crm-core-service",
   "version": "1.0.0",
   "description": "My Moleculer microservices project",
   "scripts": {
@@ -12,7 +12,7 @@
     "lint": "tslint -p tsconfig.json",
     "dc:up": "docker-compose up --build -d",
     "dc:down": "docker-compose down",
-    "update-base-service": "yarn add https://git.solazu.net/enterprise/crm/libs/base-service.git"
+    "update-base-service": "yarn add https://git.solazu.net/enterprise/crm/libs/base-service.git#develop"
   },
   "keywords": [
     "microservices",
@@ -22,7 +22,7 @@
   "devDependencies": {
     "@types/bluebird": "^3.5.24",
     "@types/jest": "^23.1.1",
-    "@types/node": "^10.12.12",
+    "@types/node": "^10.17.5",
     "jest": "^23.6.0",
     "jest-cli": "^23.6.0",
     "moleculer-repl": "^0.5.3",
@@ -32,7 +32,8 @@
     "typescript": "^3.2.2"
   },
   "dependencies": {
-    "base-service": "https://git.solazu.net/enterprise/crm/libs/base-service.git",
+    "@types/uuid": "^3.4.6",
+    "base-service": "git+https://git.solazu.net/enterprise/crm/libs/base-service.git#develop",
     "dotenv": "^8.2.0",
     "ioredis": "^4.2.0",
     "moleculer": "^0.13.0",
