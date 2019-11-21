@@ -8,11 +8,11 @@ import jwtService from "BaseService/services/jwt.service";
 class AuthService implements ServiceSchema{
 	public name: string = 'auth';
 
-	@Action({
-		params: {
-			email: { type: "string" },
-			password: { type: "string", min: 1 }
-		}
+    @Action({
+		body: {
+            email: { type: "string" },
+            password: { type: "string", min: 1 }
+		},
 	})
 	public async login(ctx: Context<IAuth.Login>): Promise<any> {
 		const { email, password } = ctx.params;
@@ -44,7 +44,7 @@ class AuthService implements ServiceSchema{
             companyName: org.companyName,
             token
         };
-	}
+    }
 }
 
 module.exports = new AuthService();
