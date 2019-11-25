@@ -1,6 +1,23 @@
 {
 	"extends": "./tsconfig",
 	"compilerOptions": {
-		"baseUrl": "./dist",
+		"baseUrl": "./",
+		"paths": {
+			"Interfaces/*": [
+				"dist/src/interfaces/*"
+			],
+			"Interfaces": [
+				"dist/src/interfaces/"
+			],
+			"BaseService/*": [
+				"node_modules/base-service/dist/*"
+			],
+			"BaseService": [
+				"node_modules/base-service/dist"
+			],
+			"BaseServiceModule/*": [
+				"node_modules/base-service/node_modules/*"
+			]
+		}
 	},
 }

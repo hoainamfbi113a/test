@@ -5,7 +5,7 @@ import { IOrg, IUser } from 'Interfaces';
 import { ModelOrganization, ModelUser } from "../src/models";
 import uuid = require("uuid");
 import { Model } from "BaseService/db/Model";
-import Knex = require("BaseServiceModule/knex");
+import Knex = require("knex");
 
 class OrgService implements ServiceSchema {
 	public name: string = 'org';

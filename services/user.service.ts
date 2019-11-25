@@ -10,7 +10,7 @@ import BaseServiceConfig from "BaseService/config/envs/index";
 import { QueryCondition } from "BaseService/interfaces/iModel";
 import jwtService from "BaseService/services/jwt.service";
 import { pluck } from "BaseService/lib/utils";
-import Knex = require("BaseServiceModule/knex");
+import Knex = require("knex");
 
 class UserService implements ServiceSchema {
 	public name: string = 'user';
