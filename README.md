@@ -1,8 +1,5 @@
 [![Moleculer](https://badgen.net/badge/Powered%20by/Moleculer/0e83cd)](https://moleculer.services)
 
-# moleculer-demo-ts
-npm install typeorm -g
-
 ## NPM scripts
 - `npm run dev` - Start development mode (load all services locally with hot-reload & REPL)
 - `npm run build`- Uses typescript to transpile service to javascript
@@ -42,3 +39,14 @@ npm install typeorm -g
 	}]
 }
  ```
+ 
+ ## Dev environement
+ - Run `yarn dev` to start in CLI.
+ - Debug with VSCode Debugger & above config (https://git.solazu.net/enterprise/crm/backend-services/service-core#vscode-debug-note-workspace-root-directory-maybe-different-among-computers)
+ - If there's any change in `base-service`, please build `base-service` by `yarn build` in `base-service` folder ---> run `yarn update-base-service` in `service-..` folder
+ 
+ ## Docker config
+ - Change environement variable in docker-compose.env
+    + Change **DB_HOST** (use IP address (i.e: 192.168.1.57), **DB_USER**, **DB_NAME**, **DB_PORT**
+ - Run `yarn dc:up` to **start docker** containers (daemon mode, remove -d if running foreground).
+ - Run `yarn dc:down` to **stop docker** containers (in daemon mode, Ctrl + C if running foreground).
