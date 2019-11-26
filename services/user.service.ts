@@ -47,7 +47,7 @@ class UserService implements ServiceSchema {
 		let hashedPassword = await jwtService.hash(password);
 		user.initOrg(uuid.v4(), org_id, email, first_name, last_name, hashedPassword, phone_number, verification_code);
 
-		await baseModel.openTransaction(async (trx: any) => {
+		await baseModel.openTransaction(async (trx: Knex.Transaction) => {
 			if (transaction) {
 				trx = transaction;
 			}
@@ -79,7 +79,7 @@ class UserService implements ServiceSchema {
 			conditions.push(new QueryCondition('email', '=', email));
 			conditions.push(new QueryCondition('org_id', '=', orgId));
 			let userModel = new ModelUser(ctx, trx);
-			user = await userModel.findByQuery(conditions)
+			user = await userModel.findByQuery(conditions);
 			delete user.password;
 			let activatedUser = this.activateUser(user, verifyCode);
 			await userModel.findAndUpdate(activatedUser.id, activatedUser);
