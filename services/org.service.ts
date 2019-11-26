@@ -1,6 +1,6 @@
 //#region Global Imports
 import { Context, ServiceSchema, Errors } from "moleculer";
-import { Action, Method } from "moleculer-decorators";
+import { Action } from "moleculer-decorators";
 import { IOrg, IUser } from 'Interfaces';
 import { ModelOrganization, ModelUser } from "../src/models";
 import uuid = require("uuid");
