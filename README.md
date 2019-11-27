@@ -48,5 +48,6 @@
  ## Docker config
  - Change environement variable in docker-compose.env
     + Change **DB_HOST** (use IP address (i.e: 192.168.1.57), **DB_USER**, **DB_NAME**, **DB_PORT**
+ - Generate ssh key (https://docs.gitlab.com/ee/ssh/) -> copy private key to `~/.ssh/` folder 
  - Run `yarn dc:up` to **start docker** containers (daemon mode, remove -d if running foreground).
  - Run `yarn dc:down` to **stop docker** containers (in daemon mode, Ctrl + C if running foreground).
