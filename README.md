@@ -21,6 +21,9 @@
 		"name": "Debug",
 		"program": "${workspaceRoot}/service-core/node_modules/moleculer/bin/moleculer-runner.js",
 		"sourceMaps": true,
+		"env": {
+			"NODE_ENV": "localhost"
+		},
 		"runtimeArgs": [
 			"--nolazy",
 			"-r",
