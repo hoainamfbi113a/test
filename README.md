@@ -49,6 +49,7 @@
  - If there's any change in `base-service`, please build `base-service` by `yarn build` in `base-service` folder ---> run `yarn update-base-service` in `service-..` folder
  
  ## Docker config
+ - Download Docker --> execute script `docker login` login to pull images from docker hub
  - Change environement variable in docker-compose.env
     + Change **DB_HOST** (use IP address (i.e: 192.168.1.57), **DB_USER**, **DB_NAME**, **DB_PORT**
  - Generate ssh key (https://docs.gitlab.com/ee/ssh/) -> copy private key to `~/.ssh/` folder 
