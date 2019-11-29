@@ -44,10 +44,13 @@
  ```
  
  ## Dev environement
- - Run `yarn dev` to start in CLI.
- - Debug with VSCode Debugger & above config (https://git.solazu.net/enterprise/crm/backend-services/service-core#vscode-debug-note-workspace-root-directory-maybe-different-among-computers)
- - If there's any change in `base-service`, please build `base-service` by `yarn build` in `base-service` folder ---> run `yarn update-base-service` in `service-..` folder
- 
+ - **Docker** mode: 
+    + Read docker config below.
+ - **Local debugger** mode:
+   + Run `yarn dev` to start in CLI.
+   + Debug with VSCode Debugger & above config (https://git.solazu.net/enterprise/crm/backend-services/service-core#vscode-debug-note-workspace-root-directory-maybe-different-among-computers)
+   + If there's any change in `base-service`, please build `base-service` by `yarn build` in `base-service` folder ---> run `yarn update-base-service` in `service-..` folder
+
  ## Docker config
  - Download Docker --> execute script `docker login` login to pull images from docker hub
  - Change environement variable in docker-compose.env
