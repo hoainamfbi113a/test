@@ -12,12 +12,11 @@
     "sourceMap": true,
     "target": "es6",
     "baseUrl": "./",
-    "outDir": "disttest",
+    "outDir": "dist",
     "declarationDir": "dist",
     "declaration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "allowJs": true,
     "paths": {
       "Interfaces/*": [
         "src/interfaces/*"
@@ -30,6 +29,9 @@
       ],
       "BaseService": [
         "node_modules/base-service/dist"
+      ],
+      "BaseServiceModule/*": [
+        "node_modules/base-service/node_modules/*"
       ]
     }
   },
@@ -40,7 +42,8 @@
   "include": [
     "./src/**/*.ts",
     "./services/**/*.ts",
-    "./test/**/*.ts"
+    "./test/**/*.ts",
+    "./moleculer.config.ts"
   ],
   "lib": ["es2017", "dom", "es2015"]
 }

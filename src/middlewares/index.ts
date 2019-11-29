@@ -1,7 +1,7 @@
 import { Errors } from "moleculer";
 // @ts-ignore
 import jwtService from "BaseService/services/jwt.service";
-import { ModelUser,ModelOrganization } from "../models";
+import { ModelUser, ModelOrganization } from "../models";
 
 const { UnAuthorizedError, ERR_NO_TOKEN } = require("BaseService/services/errors");
 
@@ -24,11 +24,10 @@ class Middleware {
                 id: id,
                 org_id: orgID
             }).first();
-            if (!user)
-            {
-                Promise.reject(new UnAuthorizedError(ERR_NO_TOKEN));
-            }else{
-                const org = await  modelOrg.getOrgByID(orgID);
+            if (!user) {
+                return Promise.reject(new UnAuthorizedError(ERR_NO_TOKEN));
+            } else {
+                const org = await modelOrg.getOrgByID(orgID);
                 ctx.meta.isAuthencated = true;
                 ctx.meta.userInfo = user;
                 ctx.meta.orgInfo = org;
@@ -37,7 +36,7 @@ class Middleware {
             modelUser.DB.destroy();
             modelOrg.DB.destroy();
         } catch (error) {
-            throw new Errors.MoleculerError( error.toString() );
+            return Promise.reject(new Errors.MoleculerError(error.toString()));
         }
     }
 }

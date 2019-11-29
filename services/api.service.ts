@@ -1,6 +1,6 @@
-import {ServiceMethods, ServiceSchema, ServiceSettingSchema} from "moleculer";
+import { ServiceMethods, ServiceSchema, ServiceSettingSchema } from "moleculer";
 import ApiGateway = require("moleculer-web");
-import {routers} from "../src/routers";
+import { routers } from "../src/routers";
 import middlewares from "../src/middlewares";
 
 class ApiService implements ServiceSchema {
@@ -24,10 +24,17 @@ class ApiService implements ServiceSchema {
 			folder: "public",
 		},
 		// Global error handler
-		onError(req: any, res: any, err: any) {
-			res.setHeader("Content-Type", "text/plain");
+		onError(_req: any, res: any, err: any) {
+			this.logger.info({
+				message: err.message,
+				stackTrace: err.stack
+			}
+			);
+			res.setHeader("Content-Type", "application/json; charset=utf-8");
 			res.writeHead(err.code || 500);
-			res.end("Global error: " + err.message);
+			res.end(JSON.stringify({
+				message: err.message,
+			}));
 		}
 	};
 
@@ -37,4 +44,4 @@ class ApiService implements ServiceSchema {
 		}
 	}
 }
-module.exports =  new ApiService();
+module.exports = new ApiService();

@@ -1,13 +1,19 @@
 export const authRouter = {
     path: "/auth",
     whitelist: [
-        // Access to any actions in all services under "/api" URL
         "auth.*",
         "user.*",
+        "org.*",
     ],
+    mappingPolicy: "restrict",
     aliases: {
-        // Call `auth.login` action with `GET /login` or `POST /login`
-        "POST login": "auth.login"
+        "POST login": "auth.login",
+        "POST user/registerByOrg": "org.create",
+        "POST user/activeByOrg": "org.activate",
+        "POST user/checkEmailExist": "user.checkEmailExist"
+    },
+    bodyParsers: {
+        json: true
     },
     authentication: false
 };

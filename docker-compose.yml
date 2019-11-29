@@ -1,46 +1,97 @@
-version: "3.0"
+version: "3.7"
 
 services:
-
   api:
     build:
       context: .
-    image: moleculer-demo-ts
-    env_file: docker-compose.env
+    container_name: service-core-api
+    restart: always
+    env_file: .env.development
+    ports:
+      - "3009:3000"
     environment:
       SERVICES: api
       PORT: 3000
     links:
       - nats
-      - redis
+      - postgresdocker
+      - auth
+      - org
+      - user
     depends_on:
       - nats
-      - redis
+      - postgresdocker
+      - auth
+      - org
+      - user
     labels:
-      - "traefik.enable=true"   
+      - "traefik.enable=true"
       - "traefik.backend=api"
       - "traefik.port=3000"
       - "traefik.frontend.entryPoints=http"
       - "traefik.frontend.rule=PathPrefix:/"
 
-  greeter:
+  auth:
     build:
       context: .
-    image: moleculer-demo-ts
-    env_file: docker-compose.env
+    container_name: service-core-auth
+    restart: always
+    env_file: .env.development
     environment:
-      SERVICES: greeter
+      SERVICES: auth
     links:
       - nats
-      - redis
+      - postgresdocker
     depends_on:
       - nats
-      - redis
+      - postgresdocker
 
+  org:
+    build:
+      context: .
+    container_name: service-core-org
+    restart: always
+    env_file: .env.development
+    environment:
+      SERVICES: org
+    links:
+      - nats
+      - postgresdocker
+    depends_on:
+      - nats
+      - postgresdocker
+
+  user:
+    build:
+      context: .
+    container_name: service-core-user
+    restart: always
+    env_file: .env.development
+    environment:
+      SERVICES: user
+    links:
+      - nats
+      - postgresdocker
+    depends_on:
+      - nats
+      - postgresdocker
+
+  postgresdocker:
+    image: postgres:11-alpine
+    container_name: db-postgresql
+    restart: always
+    env_file: .env.development
+    environment:
+      - POSTGRES_PASSWORD=anything
+    ports:
+      - "5431:5432"
+    volumes:
+      - ./docker/postgres-data:/var/lib/postgresql/data:cached
 
   nats:
     image: nats
-
+    ports:
+     - "4222:4222"
   redis:
     image: redis:alpine
 

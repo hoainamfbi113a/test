@@ -1,8 +1,9 @@
 import { Model } from 'BaseService/db/Model';
-export class ModelUser extends Model {
+import { IUser } from 'Interfaces'
+export class ModelUser extends Model<IUser.User> {
     public tableName: string = "user";
 
-    public async getUserByEmail( email: string ): Promise<any>{
+    public async getUserByEmail(email: string): Promise<any> {
         return await this.select('*').where({
             email
         }).first();
