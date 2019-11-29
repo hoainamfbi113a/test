@@ -6,7 +6,7 @@ build/testing:
   tags:
     - dc/crm-dev-api
   script:
-    - sudo docker-compose -f docker-compose-testing.yml up -d --build
+    # - sudo docker-compose -f docker-compose-testing.yml up -d --build
   only:
     #- develop
 
@@ -15,6 +15,6 @@ build/staging:
   tags:
     - dc/crm-stg-api
   script:
-    - sudo docker-compose -f docker-compose-staging.yml up -d --build
+    # - sudo docker-compose -f docker-compose-staging.yml up -d --build
   only:
     #- master

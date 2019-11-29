@@ -24,7 +24,7 @@ class UserService implements ServiceSchema {
 	public async checkEmailExist(ctx: any): Promise<any> {
 		const { email } = ctx.params
 		const userModel = new ModelUser(ctx);
-		let currentUser = await userModel.findByQuery([new QueryCondition('email', '=', email)], 'id');
+		let currentUser = await userModel.findByQuery([new QueryCondition('email', '=', email)], ['id']);
 		let response = {
 			exist: false,
 			message: 'Email not exist'
@@ -52,7 +52,7 @@ class UserService implements ServiceSchema {
 				trx = transaction;
 			}
 			const userModel = new ModelUser(ctx, trx);
-			let currentUser = await userModel.findByQuery([new QueryCondition('email', '=', email)], 'id');
+			let currentUser = await userModel.findByQuery([new QueryCondition('email', '=', email)], ['id']);
 			if (currentUser) {
 				return new Errors.ValidationError(`User ${email} was existed`);
 			}

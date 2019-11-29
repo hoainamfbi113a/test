@@ -9,7 +9,7 @@
     "build": "tsc",
     "dev": "yarn update-base-service && ts-node -r tsconfig-paths/register ./node_modules/moleculer/bin/moleculer-runner.js --hot --repl --config moleculer.config.ts services/**/*.service.ts",
     "cli": "moleculer connect NATS --id=gateway",
-    "start": "TS_NODE_PROJECT=tsconfig.production.json node -r tsconfig-paths/register ./node_modules/moleculer/bin/moleculer-runner.js --config dist/moleculer.config.js dist/services",
+    "start": "TS_NODE_PROJECT=tsconfig.docker.json node -r tsconfig-paths/register ./node_modules/moleculer/bin/moleculer-runner.js --config dist/moleculer.config.js dist/services",
     "ci": "jest --watch",
     "test": "jest --coverage",
     "lint": "tslint -p tsconfig.json",
