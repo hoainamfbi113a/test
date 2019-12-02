@@ -5,6 +5,7 @@ services:
     build:
       context: .
     container_name: service-core-api
+    image: service-core-api
     restart: always
     env_file: .env.development
     ports:
@@ -34,6 +35,7 @@ services:
   auth:
     build:
       context: .
+    image: service-core-auth
     container_name: service-core-auth
     restart: always
     env_file: .env.development
@@ -50,6 +52,7 @@ services:
     build:
       context: .
     container_name: service-core-org
+    image: service-core-org
     restart: always
     env_file: .env.development
     environment:
@@ -64,6 +67,7 @@ services:
   user:
     build:
       context: .
+    image: service-core-user
     container_name: service-core-user
     restart: always
     env_file: .env.development
@@ -92,8 +96,11 @@ services:
     image: nats
     ports:
      - "4222:4222"
+
   redis:
     image: redis:alpine
+    ports:
+      - "6378:6379"
 
   traefik:
     image: traefik
