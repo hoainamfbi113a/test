@@ -67,13 +67,15 @@ services:
 
   nats:
     image: nats
-    port: "4223:4222"
+    ports:
+      - "4223:4222"
     container_name: dental-nats
 
   redis:
     image: redis:alpine
     container_name: dental-redis
-    port: "6378:6379"
+    ports:
+      - "6378:6379"
 
   traefik:
     image: traefik
