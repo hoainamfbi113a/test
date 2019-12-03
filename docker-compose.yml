@@ -5,7 +5,7 @@ services:
     build:
       context: .
     container_name: service-core-api
-    image: service-core-api
+    image: service-core
     restart: always
     env_file: envs/.env.development
     ports:
@@ -35,7 +35,7 @@ services:
   auth:
     build:
       context: .
-    image: service-core-auth
+    image: service-core
     container_name: service-core-auth
     restart: always
     env_file: envs/.env.development
@@ -52,7 +52,7 @@ services:
     build:
       context: .
     container_name: service-core-org
-    image: service-core-org
+    image: service-core
     restart: always
     env_file: envs/.env.development
     environment:
@@ -67,7 +67,7 @@ services:
   user:
     build:
       context: .
-    image: service-core-user
+    image: service-core
     container_name: service-core-user
     restart: always
     env_file: envs/.env.development
