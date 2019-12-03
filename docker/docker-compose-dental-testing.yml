@@ -1,0 +1,87 @@
+version: "3.7"
+
+services:
+  api:
+    build:
+      context: ./../
+    container_name: service-core-dental-api
+    env_file: ./../envs/.env.testing
+    ports:
+      - "3010:3000"
+    environment:
+      SERVICES: api
+      PORT: 3000
+    links:
+      - nats
+      - auth
+      - org
+      - user
+    depends_on:
+      - nats
+      - auth
+      - org
+      - user
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend=api"
+      - "traefik.port=3000"
+      - "traefik.frontend.entryPoints=http"
+      - "traefik.frontend.rule=PathPrefix:/"
+
+  auth:
+    build:
+      context: ./../
+    container_name: service-core-dental-auth
+    env_file: ./../envs/.env.testing
+    environment:
+      SERVICES: auth
+    links:
+      - nats
+    depends_on:
+      - nats
+
+  org:
+    build:
+      context: ./../
+    container_name: service-core-dental-org
+    env_file: ./../envs/.env.testing
+    environment:
+      SERVICES: org
+    links:
+      - nats
+    depends_on:
+      - nats
+
+  user:
+    build:
+      context: ./../
+    container_name: service-core-dental-user
+    env_file: ./../envs/.env.testing
+    environment:
+      SERVICES: user
+    links:
+      - nats
+    depends_on:
+      - nats
+
+
+  nats:
+    image: nats
+    port: "4223:4222"
+    container_name: dental-nats
+
+  redis:
+    image: redis:alpine
+    container_name: dental-redis
+    port: "6378:6379"
+
+  traefik:
+    image: traefik
+    container_name: dental-traefik
+    command: --web --docker --docker.domain=docker.localhost --logLevel=INFO --docker.exposedbydefault=false
+    ports:
+      - "3000:80"
+      - "3001:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /dev/null:/traefik.toml
