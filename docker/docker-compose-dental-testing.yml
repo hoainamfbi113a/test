@@ -4,10 +4,10 @@ services:
   api:
     build:
       context: ./../
-    container_name: service-core-api
+    container_name: service-core-dental-api
     env_file: ./../envs/.env.testing
     ports:
-      - "3009:3000"
+      - "3010:3000"
     environment:
       SERVICES: api
       PORT: 3000
@@ -31,7 +31,7 @@ services:
   auth:
     build:
       context: ./../
-    container_name: service-core-auth
+    container_name: service-core-dental-auth
     env_file: ./../envs/.env.testing
     environment:
       SERVICES: auth
@@ -43,7 +43,7 @@ services:
   org:
     build:
       context: ./../
-    container_name: service-core-org
+    container_name: service-core-dental-org
     env_file: ./../envs/.env.testing
     environment:
       SERVICES: org
@@ -55,7 +55,7 @@ services:
   user:
     build:
       context: ./../
-    container_name: service-core-user
+    container_name: service-core-dental-user
     env_file: ./../envs/.env.testing
     environment:
       SERVICES: user
@@ -67,12 +67,17 @@ services:
 
   nats:
     image: nats
+    port: "4223:4222"
+    container_name: dental-nats
 
   redis:
     image: redis:alpine
+    container_name: dental-redis
+    port: "6378:6379"
 
   traefik:
     image: traefik
+    container_name: dental-traefik
     command: --web --docker --docker.domain=docker.localhost --logLevel=INFO --docker.exposedbydefault=false
     ports:
       - "3000:80"
