@@ -3,7 +3,7 @@ version: "3.7"
 services:
   api:
     build:
-      context: .
+      context: ./../
     container_name: service-core-api
     env_file: ./../envs/.env.testing
     ports:
@@ -30,7 +30,7 @@ services:
 
   auth:
     build:
-      context: .
+      context: ./../
     container_name: service-core-auth
     env_file: ./../envs/.env.testing
     environment:
@@ -42,7 +42,7 @@ services:
 
   org:
     build:
-      context: .
+      context: ./../
     container_name: service-core-org
     env_file: ./../envs/.env.testing
     environment:
@@ -54,7 +54,7 @@ services:
 
   user:
     build:
-      context: .
+      context: ./../
     container_name: service-core-user
     env_file: ./../envs/.env.testing
     environment:
