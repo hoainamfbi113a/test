@@ -1,7 +1,7 @@
 version: "3.7"
 
 services:
-  api:
+  dental-api:
     build:
       context: ./../
     container_name: service-core-dental-api
@@ -12,15 +12,15 @@ services:
       SERVICES: api
       PORT: 3000
     links:
-      - nats
-      - auth
-      - org
-      - user
+      - dental-nats
+      - dental-auth
+      - dental-org
+      - dental-user
     depends_on:
-      - nats
-      - auth
-      - org
-      - user
+      - dental-nats
+      - dental-auth
+      - dental-org
+      - dental-user
     labels:
       - "traefik.enable=true"
       - "traefik.backend=api"
@@ -28,7 +28,7 @@ services:
       - "traefik.frontend.entryPoints=http"
       - "traefik.frontend.rule=PathPrefix:/"
 
-  auth:
+  dental-auth:
     build:
       context: ./../
     container_name: service-core-dental-auth
@@ -36,11 +36,11 @@ services:
     environment:
       SERVICES: auth
     links:
-      - nats
+      - dental-nats
     depends_on:
-      - nats
+      - dental-nats
 
-  org:
+  dental-org:
     build:
       context: ./../
     container_name: service-core-dental-org
@@ -48,11 +48,11 @@ services:
     environment:
       SERVICES: org
     links:
-      - nats
+      - dental-nats
     depends_on:
-      - nats
+      - dental-nats
 
-  user:
+  dental-user:
     build:
       context: ./../
     container_name: service-core-dental-user
@@ -60,22 +60,24 @@ services:
     environment:
       SERVICES: user
     links:
-      - nats
+      - dental-nats
     depends_on:
-      - nats
+      - dental-nats
 
 
-  nats:
+  dental-nats:
     image: nats
-    port: "4223:4222"
+    ports: 
+      - "4223:4222"
     container_name: dental-nats
 
-  redis:
+  dental-redis:
     image: redis:alpine
     container_name: dental-redis
-    port: "6378:6379"
+    ports: 
+      - "6378:6379"
 
-  traefik:
+  dental-traefik:
     image: traefik
     container_name: dental-traefik
     command: --web --docker --docker.domain=docker.localhost --logLevel=INFO --docker.exposedbydefault=false
