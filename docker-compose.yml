@@ -7,7 +7,7 @@ services:
     container_name: service-core-api
     image: service-core-api
     restart: always
-    env_file: .env.development
+    env_file: envs/.env.development
     ports:
       - "3009:3000"
     environment:
@@ -38,7 +38,7 @@ services:
     image: service-core-auth
     container_name: service-core-auth
     restart: always
-    env_file: .env.development
+    env_file: envs/.env.development
     environment:
       SERVICES: auth
     links:
@@ -54,7 +54,7 @@ services:
     container_name: service-core-org
     image: service-core-org
     restart: always
-    env_file: .env.development
+    env_file: envs/.env.development
     environment:
       SERVICES: org
     links:
@@ -70,7 +70,7 @@ services:
     image: service-core-user
     container_name: service-core-user
     restart: always
-    env_file: .env.development
+    env_file: envs/.env.development
     environment:
       SERVICES: user
     links:
@@ -84,9 +84,10 @@ services:
     image: postgres:11-alpine
     container_name: db-postgresql
     restart: always
-    env_file: .env.development
+    env_file: envs/.env.development
     environment:
       - POSTGRES_PASSWORD=anything
+      - POSTGRES_INITDB_ARGS=--auth-host=trust --auth-local=trust
     ports:
       - "5431:5432"
     volumes:

@@ -1,17 +1,18 @@
 version: "3.7"
 
 services:
-  postgresdocker:
-    image: postgres:11-alpine
-    container_name: db-postgresql
+  api-core:
+    image: dockerhub/...
+    container_name: postgresdocker
     restart: always
-    env_file: .env.development
+    env_file: ./../envs/.env.development
     environment:
       - POSTGRES_PASSWORD=anything
+      - POSTGRES_INITDB_ARGS=--auth-host=trust --auth-local=trust
     ports:
       - "5431:5432"
     volumes:
-      - ./docker/postgres-data:/var/lib/postgresql/data:cached
+      - ./postgres-data:/var/lib/postgresql/data
 
   nats:
     image: nats
