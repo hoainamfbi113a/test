@@ -1,0 +1,72 @@
+version: "3.7"
+
+services:
+  crm-api:
+    build:
+      context: ./../
+    container_name: service-core-crm-api
+    env_file: ./../envs/.env.testing
+    ports:
+      - "3009:3009"
+    environment:
+      SERVICES: api
+      PORT: 3009
+    links:
+      - crm-nats
+      - crm-auth
+      - crm-org
+      - crm-user
+    depends_on:
+      - crm-nats
+      - crm-auth
+      - crm-org
+      - crm-user
+
+  crm-auth:
+    build:
+      context: ./../
+    container_name: service-core-crm-auth
+    env_file: ./../envs/.env.testing
+    environment:
+      SERVICES: auth
+    links:
+      - crm-nats
+    depends_on:
+      - crm-nats
+
+  crm-org:
+    build:
+      context: ./../
+    container_name: service-core-crm-org
+    env_file: ./../envs/.env.testing
+    environment:
+      SERVICES: org
+    links:
+      - crm-nats
+    depends_on:
+      - crm-nats
+
+  crm-user:
+    build:
+      context: ./../
+    container_name: service-core-crm-user
+    env_file: ./../envs/.env.testing
+    environment:
+      SERVICES: user
+    links:
+      - crm-nats
+    depends_on:
+      - crm-nats
+
+
+  crm-nats:
+    image: nats
+    container_name: crm-nats
+    ports:
+      - "4224:4222"
+
+  crm-redis:
+    image: redis:alpine
+    container_name: crm-redis
+    ports:
+      - "6380:6379"
