@@ -15,7 +15,7 @@
     "lint": "tslint -p tsconfig.json",
     "dc:up": "cp ~/.ssh/id_rsa id_rsa && docker-compose up --build -d; rm id_rsa",
     "dc:down": "docker-compose down",
-    "update-base-service": "yarn add git+ssh://git@git.solazu.net:enterprise/crm/libs/base-service.git#dev/create-org"
+    "update-base-service": "yarn add git+ssh://git@git.solazu.net:enterprise/crm/libs/base-service.git#develop"
   },
   "keywords": [
     "microservices",
@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "@types/uuid": "^3.4.6",
-    "base-service": "git+ssh://git@git.solazu.net:enterprise/crm/libs/base-service.git#dev/create-org",
+    "base-service": "git+ssh://git@git.solazu.net:enterprise/crm/libs/base-service.git#develop",
     "dotenv": "^8.2.0",
     "ioredis": "^4.2.0",
     "moleculer": "^0.13.0",
