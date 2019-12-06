@@ -46,6 +46,18 @@ services:
     depends_on:
       - crm-nats
 
+  crm-plugin:
+    build:
+      context: ./../
+    container_name: service-core-crm-plugin
+    env_file: ./../envs/.env.testing
+    environment:
+      SERVICES: plugin
+    links:
+      - crm-nats
+    depends_on:
+      - crm-nats
+
   crm-user:
     build:
       context: ./../
