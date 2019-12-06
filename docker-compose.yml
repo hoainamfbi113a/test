@@ -64,6 +64,22 @@ services:
       - nats
       - postgresdocker
 
+  plugin:
+    build:
+      context: .
+    container_name: service-core-plugin
+    image: service-core
+    restart: always
+    env_file: envs/.env.development
+    environment:
+      SERVICES: plugin
+    links:
+      - nats
+      - postgresdocker
+    depends_on:
+      - nats
+      - postgresdocker
+
   user:
     build:
       context: .
