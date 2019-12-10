@@ -1,1 +1,0 @@
-export { IOrg } from './IOrg';

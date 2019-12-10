@@ -2,7 +2,7 @@
 import { Context, ServiceSchema, Errors } from "moleculer";
 import { Action } from "moleculer-decorators";
 import { IOrg, IUser } from 'Interfaces';
-import { ModelOrganization, ModelUser } from "../src/models";
+import { ModelOrganization, Organization } from "../src/models";
 import uuid = require("uuid");
 import { Model } from "BaseService/db/Model";
 import Knex = require("knex");
@@ -53,7 +53,7 @@ class OrgService implements ServiceSchema {
 	public async create(ctx: Context<IOrg.ICreateOrg>): Promise<any> {
 		const { first_name, last_name, company_name, phone_number, email, password, redirectUrl, transaction } = ctx.params
 		let org_password = uuid.v4();
-		let data = new IOrg.Organization(uuid.v4(), org_password, company_name);
+		let data = new Organization(uuid.v4(), org_password, company_name);
 		const baseModel = new Model(ctx);
 		let orgId = null;
 		let createdUser: IUser.CreateUserOutput
