@@ -32,6 +32,7 @@ class Middleware {
                 ctx.meta.userInfo = user;
                 ctx.meta.orgInfo = org;
                 ctx.meta.test = "456";
+                ctx.meta.method = req.method;
             }
             modelUser.DB.destroy();
             modelOrg.DB.destroy();
