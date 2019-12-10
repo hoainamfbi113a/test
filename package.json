@@ -35,8 +35,10 @@
     "typescript": "^3.2.2"
   },
   "dependencies": {
+    "@types/compression": "^1.0.1",
     "@types/uuid": "^3.4.6",
     "base-service": "git+ssh://git@git.solazu.net:enterprise/crm/libs/base-service.git#develop",
+    "compression": "^1.7.4",
     "dotenv": "^8.2.0",
     "ioredis": "^4.2.0",
     "moleculer": "^0.13.0",
