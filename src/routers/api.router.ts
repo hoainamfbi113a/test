@@ -1,15 +1,13 @@
-import middlewares from '../../src/middlewares';
+import compression from "compression";
 export const apiRouter = {
     path: "/api",
     whitelist: [
         // Access to any actions in all services under "/api" URL
         "**",
     ],
-    mappingPolicy: "restrict",
     aliases: {
-        "GET plugin": "plugin.getOrgPlugins",
-        "GET plugin/master": "plugin.getAllMaster"
     },
+    use: [compression()],
     bodyParsers: {
         json: true
     },
