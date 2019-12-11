@@ -6,6 +6,7 @@ import middlewares from "../src/middlewares";
 class ApiService implements ServiceSchema {
 	public name: string = "api";
 	public mixins: Array<ServiceSchema> = [ApiGateway];
+	public dependencies: Array<string> = ['auth', 'org', 'plugin', 'user'];
 	public settings: ServiceSettingSchema = {
 		port: process.env.PORT || 3000,
 		// Global CORS settings
