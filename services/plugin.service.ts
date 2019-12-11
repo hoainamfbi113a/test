@@ -1,15 +1,17 @@
 
 import Knex = require("knex");
-import { Context, ServiceSchema, Errors } from "moleculer";
+import { Context, ServiceSchema } from "moleculer";
 import { Action } from "moleculer-decorators";
 import { IPlugin } from 'Interfaces';
 import { ModelMstPlugin, ModelOrgPlugin, MstPlugin, OrgPlugin } from "../src/models";
 
 class PluginService implements ServiceSchema {
 	public name: string = 'plugin';
+	public dependencies: Array<string> = ['user'];
 
 	@Action({
-		params: IPlugin.GetPluginInputSchema
+		params: IPlugin.GetPluginInputSchema,
+		rest: 'GET /getAllMaster'
 	})
 	public async getAllMaster(ctx: Context<IPlugin.IGetMstPluginInput>): Promise<IPlugin.IGetMstPluginOutput> {
 		let model = new ModelMstPlugin(ctx, null, true);
@@ -23,7 +25,8 @@ class PluginService implements ServiceSchema {
 	}
 
 	@Action({
-		params: IPlugin.GetPluginInputSchema
+		params: IPlugin.GetPluginInputSchema,
+		rest: 'GET /getOrgPlugins'
 	})
 	public async getOrgPlugins(ctx: Context<IPlugin.IGetOrgPluginInput>): Promise<IPlugin.IGetOrgPluginOutput> {
 		let model = new ModelOrgPlugin(ctx);
@@ -37,7 +40,8 @@ class PluginService implements ServiceSchema {
 	}
 
 	@Action({
-		params: IPlugin.CreateMstPluginInputSchema
+		params: IPlugin.CreateMstPluginInputSchema,
+		rest: 'POST createMasterPlugin'
 	})
 	public async createMasterPlugin(ctx: Context<IPlugin.ICreateMstPluginInput>): Promise<IPlugin.ICreateMstPluginOutput> {
 		let model = new ModelMstPlugin(ctx);
@@ -53,7 +57,8 @@ class PluginService implements ServiceSchema {
 	}
 
 	@Action({
-		params: IPlugin.UpdateMstPluginInputSchema
+		params: IPlugin.UpdateMstPluginInputSchema,
+		rest: 'PUT updateMasterPlugin'
 	})
 	public async updateMasterPlugin(ctx: Context<IPlugin.IUpdateMstPluginInput>): Promise<IPlugin.IUpdateMstPluginOutput> {
 		let model = new ModelMstPlugin(ctx);
@@ -69,7 +74,9 @@ class PluginService implements ServiceSchema {
 		return result;
 	}
 
-	@Action()
+	@Action({
+		rest: 'POST addOrgPlugin'
+	})
 	public async addOrgPlugin(ctx: Context<IPlugin.IAddOrgPluginInput>): Promise<IPlugin.IAddOrgPluginOutput> {
 		let pluginId = ctx.params.pluginId;
 		let model = new ModelMstPlugin(ctx);
@@ -89,7 +96,9 @@ class PluginService implements ServiceSchema {
 		return result;
 	}
 
-	@Action()
+	@Action({
+		rest: 'DELETE removeOrgPlugin/:pluginId'
+	})
 	public async removeOrgPlugin(ctx: Context<IPlugin.IRemoveOrgPluginInput>): Promise<IPlugin.IRemoveOrgPluginOutput> {
 		let pluginId = ctx.params.pluginId;
 		let model = new ModelOrgPlugin(ctx);
@@ -102,7 +111,8 @@ class PluginService implements ServiceSchema {
 
 
 	@Action({
-		params: IPlugin.DeleteMstPluginInputSchema
+		params: IPlugin.DeleteMstPluginInputSchema,
+		rest: 'DELETE deleteMasterPlugin/:id'
 	}
 	)
 	public async deleteMasterPlugin(ctx: Context<IPlugin.IDeletePluginInput>): Promise<IPlugin.IDeletePluginOutput> {

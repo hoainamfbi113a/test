@@ -12,5 +12,6 @@ export const apiRouter = {
         json: true
     },
     // tslint:disable-next-line:object-literal-sort-keys
-    authentication: true
+    authentication: true,
+    autoAliases: true
 };
