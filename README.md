@@ -43,6 +43,15 @@
 }
  ```
  
+ ## Knex Migration
+ - **Install Knex CLI tool**:
+    + https://www.npmjs.com/package/knex
+ - **Create migration file**:
+	+ Run command `knex migrate:make <file-name> -x ts`.
+	+ For example: **knex migrate:make create_mail_template -x ts** ==> Generated file: ***20191211143756_create_mail_template.ts***
+ - **Migrate all latest files**:
+    + Run command `knex migrate:latest`
+ 
  ## Dev environement
  - **Docker** mode: 
     + Read docker config below.

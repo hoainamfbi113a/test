@@ -1,1 +1,0 @@
-export { IAuth } from './IAuth';

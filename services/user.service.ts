@@ -2,7 +2,7 @@
 import { Context, ServiceSchema, Errors } from "moleculer";
 import { Action, Method } from "moleculer-decorators";
 import { IUser } from 'Interfaces';
-import { ModelUser } from "../src/models";
+import { ModelUser, User } from "../src/models";
 import uuid = require('uuid');
 import { Model } from "BaseService/db/Model";
 import { MailService } from "BaseService/services/mail.service";
@@ -43,7 +43,7 @@ class UserService implements ServiceSchema {
 		const { email, first_name, last_name, org_id, password, phone_number, redirectUrl, transaction } = ctx.params
 		const baseModel = new Model(ctx);
 		let verification_code = uuid.v4();
-		let user = new IUser.User();
+		let user = new User();
 		let hashedPassword = await jwtService.hash(password);
 		user.initOrg(uuid.v4(), org_id, email, first_name, last_name, hashedPassword, phone_number, verification_code);
 
@@ -70,7 +70,7 @@ class UserService implements ServiceSchema {
 	public async activate(ctx: Context<IUser.IActivateUserInput>): Promise<any> {
 		const { email, orgId, verifyCode, transaction } = ctx.params;
 		const baseModel = new Model(ctx);
-		let user: IUser.User;
+		let user: User;
 		await baseModel.openTransaction(async (trx: Knex.Transaction) => {
 			if (transaction) {
 				trx = transaction;
@@ -90,7 +90,7 @@ class UserService implements ServiceSchema {
 	}
 
 	@Method
-	private sendVerificationMail(orgUser: IUser.User, redirectUrl: string = 'verify') {
+	private sendVerificationMail(orgUser: User, redirectUrl: string = 'verify') {
 		let mailService = new MailService(null);
 		let verificationEmailSubject = 'Kích hoạt tài khoản';
 		let message = mailService.template(
@@ -109,7 +109,7 @@ class UserService implements ServiceSchema {
 	}
 
 	@Method
-	private activateUser(user: IUser.User, verifyCode: string): IUser.User {
+	private activateUser(user: User, verifyCode: string): User {
 		if (!user) {
 			throw new Errors.MoleculerClientError('This user was not existed');
 		} else if (user.verify_code != verifyCode) {
@@ -119,7 +119,7 @@ class UserService implements ServiceSchema {
 		} else if (user.is_deleted) {
 			throw new Errors.MoleculerClientError('This user was deleted');
 		}
-		let activatedUser = new IUser.User();
+		let activatedUser = new User();
 		activatedUser.id = user.id;
 		activatedUser.activated = true;
 		activatedUser.verify_code = null;

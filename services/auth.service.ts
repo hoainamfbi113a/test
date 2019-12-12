@@ -3,14 +3,14 @@ import jwtService from "BaseService/services/jwt.service";
 import { IAuth } from "Interfaces";
 import {Context, Errors, ServiceSchema} from "moleculer";
 import { Action } from "moleculer-decorators";
-import {ModelOrganization, ModelUser} from "../src/models";
+import { ModelOrganization, ModelUser } from "../src/models";
 
 class AuthService implements ServiceSchema {
     public name: string = "auth";
 
     @Action({
-        body: {
-            email: { type: "string" },
+        params: {
+            email: { type: "email" },
             password: { type: "string", min: 6 },
         },
     })

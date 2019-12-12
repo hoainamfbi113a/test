@@ -1,75 +1,20 @@
 version: "3.7"
 
 services:
-  crm-api:
+  service-core:
     build:
       context: ./../
-    container_name: service-core-crm-api
+    container_name: service-core-crm
+    image: registry.solazu.net/enterprise/crm/backend-services/service-core:testing
     env_file: ./../envs/.env.testing
     ports:
       - "3009:3009"
     environment:
-      SERVICES: api
       PORT: 3009
     links:
       - crm-nats
-      - crm-auth
-      - crm-org
-      - crm-user
     depends_on:
       - crm-nats
-      - crm-auth
-      - crm-org
-      - crm-user
-
-  crm-auth:
-    build:
-      context: ./../
-    container_name: service-core-crm-auth
-    env_file: ./../envs/.env.testing
-    environment:
-      SERVICES: auth
-    links:
-      - crm-nats
-    depends_on:
-      - crm-nats
-
-  crm-org:
-    build:
-      context: ./../
-    container_name: service-core-crm-org
-    env_file: ./../envs/.env.testing
-    environment:
-      SERVICES: org
-    links:
-      - crm-nats
-    depends_on:
-      - crm-nats
-
-  crm-plugin:
-    build:
-      context: ./../
-    container_name: service-core-crm-plugin
-    env_file: ./../envs/.env.testing
-    environment:
-      SERVICES: plugin
-    links:
-      - crm-nats
-    depends_on:
-      - crm-nats
-
-  crm-user:
-    build:
-      context: ./../
-    container_name: service-core-crm-user
-    env_file: ./../envs/.env.testing
-    environment:
-      SERVICES: user
-    links:
-      - crm-nats
-    depends_on:
-      - crm-nats
-
 
   crm-nats:
     image: nats
