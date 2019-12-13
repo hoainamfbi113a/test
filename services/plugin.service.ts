@@ -4,6 +4,7 @@ import { Context, ServiceSchema } from "moleculer";
 import { Action } from "moleculer-decorators";
 import { IPlugin } from 'Interfaces';
 import { ModelMstPlugin, ModelOrgPlugin, MstPlugin, OrgPlugin } from "../src/models";
+import { Model } from "BaseService/db/Model";
 
 class PluginService implements ServiceSchema {
 	public name: string = 'plugin';
@@ -44,15 +45,18 @@ class PluginService implements ServiceSchema {
 		rest: 'POST createMasterPlugin'
 	})
 	public async createMasterPlugin(ctx: Context<IPlugin.ICreateMstPluginInput>): Promise<IPlugin.ICreateMstPluginOutput> {
-		let model = new ModelMstPlugin(ctx);
 		let result: any = null;
+		let model = new Model(ctx, null, true);
 		await model.openTransaction(async (trx: Knex.Transaction) => {
+			let mstModel = new ModelMstPlugin(ctx, trx, true);
 			let data = new MstPlugin();
 			data.name = ctx.params.name;
 			data.key = ctx.params.key;
-			result = (await model.insert(data))
+			result = (await mstModel.insert(data))
 				.map(p => { return <IPlugin.ICreateMstPluginOutput>{ id: p.id, name: p.name, key: p.key } });
-		})
+		}).then((value) => { }).catch((error) => {
+			throw error;
+		});
 		return result;
 	}
 
@@ -61,7 +65,7 @@ class PluginService implements ServiceSchema {
 		rest: 'PUT updateMasterPlugin'
 	})
 	public async updateMasterPlugin(ctx: Context<IPlugin.IUpdateMstPluginInput>): Promise<IPlugin.IUpdateMstPluginOutput> {
-		let model = new ModelMstPlugin(ctx);
+		let model = new ModelMstPlugin(ctx, null, true);
 		let result: any = null;
 		await model.openTransaction(async (trx: Knex.Transaction) => {
 			let data = new MstPlugin();
@@ -116,7 +120,7 @@ class PluginService implements ServiceSchema {
 	}
 	)
 	public async deleteMasterPlugin(ctx: Context<IPlugin.IDeletePluginInput>): Promise<IPlugin.IDeletePluginOutput> {
-		let model = new ModelMstPlugin(ctx);
+		let model = new ModelMstPlugin(ctx, null, true);
 		let result: any = null;
 		await model.openTransaction(async (trx: Knex.Transaction) => {
 			result = await model.deleteByPrimaryKey(ctx.params.id, ['id']);
