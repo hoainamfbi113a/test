@@ -1,0 +1,29 @@
+version: "3.7"
+
+services:
+  service-core:
+    build:
+      context: ./../
+    container_name: service-core-crm
+    image: registry.solazu.net/enterprise/crm/backend-services/service-core:testing
+    env_file: ./../envs/.env.testing
+    ports:
+      - "3009:3009"
+    environment:
+      PORT: 3009
+    links:
+      - crm-nats
+    depends_on:
+      - crm-nats
+
+  crm-nats:
+    image: nats
+    container_name: crm-nats
+    ports:
+      - "4224:4222"
+
+  crm-redis:
+    image: redis:alpine
+    container_name: crm-redis
+    ports:
+      - "6380:6379"

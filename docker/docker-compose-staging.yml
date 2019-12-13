@@ -1,0 +1,29 @@
+version: "3.7"
+
+services:
+  service-core:
+    build:
+      context: ./../
+    container_name: crm-service-core-staging
+    image: registry.solazu.net/enterprise/crm/backend-services/service-core:staging
+    env_file: ./../envs/.env.staging
+    ports:
+      - "3010:3009"
+    environment:
+      PORT: 3010
+    links:
+      - crm-nats
+    depends_on:
+      - crm-nats
+
+  crm-nats:
+    image: nats
+    container_name: crm-nats-staging
+    ports:
+      - "4225:4222"
+
+  crm-redis:
+    image: redis:alpine
+    container_name: crm-redis-staging
+    ports:
+      - "6381:6379"

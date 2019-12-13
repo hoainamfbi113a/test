@@ -1,0 +1,72 @@
+version: "3.7"
+
+services:
+  dental-api:
+    build:
+      context: ./../
+    container_name: service-core-dental-api
+    env_file: ./../envs/.env.testing
+    ports:
+      - "3010:3010"
+    environment:
+      SERVICES: api
+      PORT: 3010
+    links:
+      - dental-nats
+      - dental-auth
+      - dental-org
+      - dental-user
+    depends_on:
+      - dental-nats
+      - dental-auth
+      - dental-org
+      - dental-user
+
+  dental-auth:
+    build:
+      context: ./../
+    container_name: service-core-dental-auth
+    env_file: ./../envs/.env.testing
+    environment:
+      SERVICES: auth
+    links:
+      - dental-nats
+    depends_on:
+      - dental-nats
+
+  dental-org:
+    build:
+      context: ./../
+    container_name: service-core-dental-org
+    env_file: ./../envs/.env.testing
+    environment:
+      SERVICES: org
+    links:
+      - dental-nats
+    depends_on:
+      - dental-nats
+
+  dental-user:
+    build:
+      context: ./../
+    container_name: service-core-dental-user
+    env_file: ./../envs/.env.testing
+    environment:
+      SERVICES: user
+    links:
+      - dental-nats
+    depends_on:
+      - dental-nats
+
+
+  dental-nats:
+    image: nats
+    ports:
+      - "4223:4222"
+    container_name: dental-nats
+
+  dental-redis:
+    image: redis:alpine
+    container_name: dental-redis
+    ports:
+      - "6378:6379"

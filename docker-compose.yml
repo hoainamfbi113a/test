@@ -1,0 +1,59 @@
+version: "3.7"
+
+services:
+  api:
+    build:
+      context: .
+    container_name: service-core-api
+    image: registry.solazu.net/enterprise/crm/backend-services/service-core
+    restart: always
+    env_file: envs/.env.development
+    ports:
+      - "3009:3000"
+    environment:
+      PORT: 3000
+    links:
+      - nats
+      - postgresdocker
+    depends_on:
+      - nats
+      - postgresdocker
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend=api"
+      - "traefik.port=3000"
+      - "traefik.frontend.entryPoints=http"
+      - "traefik.frontend.rule=PathPrefix:/"
+
+  postgresdocker:
+    image: postgres:11-alpine
+    container_name: db-postgresql
+    restart: always
+    env_file: envs/.env.development
+    environment:
+      - POSTGRES_PASSWORD=anything
+      - POSTGRES_INITDB_ARGS=--auth-host=trust --auth-local=trust
+    ports:
+      - "5431:5432"
+    volumes:
+      - ./docker/postgres-data:/var/lib/postgresql/data:cached
+
+  nats:
+    image: nats
+    ports:
+     - "4222:4222"
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6378:6379"
+
+  traefik:
+    image: traefik
+    command: --web --docker --docker.domain=docker.localhost --logLevel=INFO --docker.exposedbydefault=false
+    ports:
+      - "3000:80"
+      - "3001:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /dev/null:/traefik.toml

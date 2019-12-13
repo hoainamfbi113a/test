@@ -1,0 +1,26 @@
+stages:
+  - build
+
+build/testing:
+  stage: build
+  tags:
+    - dc/crm-dev-api
+  script:
+    - cd /localsrc/gitlab-runner/apps/service-core
+    - git checkout develop
+    - git pull
+    - sudo docker-compose -f docker/docker-compose-crm-testing.yml up --build -d
+  only:
+    - develop
+
+build/staging:
+  stage: build
+  tags:
+    - dc/crm-stg-api
+  script:
+    - cd /localsrc/gitlab-runner/apps/service-core
+    - git checkout master
+    - git pull
+    - sudo docker-compose -f docker/docker-compose-crm-staging.yml up --build -d
+  only:
+    - master
