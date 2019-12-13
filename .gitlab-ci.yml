@@ -18,7 +18,9 @@ build/staging:
   tags:
     - dc/crm-stg-api
   script:
-    # - sudo docker-compose -f docker-compose-staging.yml up -d --build
-    - echo 'Deploy master branch'
+    - cd /localsrc/gitlab-runner/apps/service-core
+    - git checkout master
+    - git pull
+    - sudo docker-compose -f docker/docker-compose-crm-staging.yml up --build -d
   only:
     - master
