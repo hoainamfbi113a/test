@@ -6,8 +6,10 @@ build/testing:
   tags:
     - dc/crm-dev-api
   script:
-    # - sudo docker-compose -f docker-compose-testing.yml up -d --build
-    - echo 'Deploy develop branch'
+    - cd /localsrc/gitlab-runner/apps/service-core
+    - git checkout develop
+    - git pull
+    - sudo docker-compose -f docker/docker-compose-crm-testing.yml up --build -d
   only:
     - develop
 
