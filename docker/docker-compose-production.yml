@@ -1,82 +1,29 @@
 version: "3.7"
 
 services:
-  api:
+  service-core:
     build:
-      context: .
-    container_name: service-core-api
+      context: ./../
+    container_name: crm-service-core-production
+    image: registry.solazu.net/enterprise/crm/backend-services/service-core:production
     env_file: ./../envs/.env.production
     ports:
-      - "3009:3000"
+      - "3011:3009"
     environment:
-      SERVICES: api
-      PORT: 3000
+      PORT: 3011
     links:
-      - nats
-      - auth
-      - org
-      - user
+      - crm-nats
     depends_on:
-      - nats
-      - auth
-      - org
-      - user
-    labels:
-      - "traefik.enable=true"
-      - "traefik.backend=api"
-      - "traefik.port=3000"
-      - "traefik.frontend.entryPoints=http"
-      - "traefik.frontend.rule=PathPrefix:/"
+      - crm-nats
 
-  auth:
-    build:
-      context: .
-    container_name: service-core-auth
-    env_file: ./../envs/.env.production
-    environment:
-      SERVICES: auth
-    links:
-      - nats
-    depends_on:
-      - nats
-
-  org:
-    build:
-      context: .
-    container_name: service-core-org
-    env_file: ./../envs/.env.production
-    environment:
-      SERVICES: org
-    links:
-      - nats
-    depends_on:
-      - nats
-
-  user:
-    build:
-      context: .
-    container_name: service-core-user
-    env_file: ./../envs/.env.production
-    environment:
-      SERVICES: user
-    links:
-      - nats
-    depends_on:
-      - nats
-
-
-  nats:
+  crm-nats:
     image: nats
-
-  redis:
-    image: redis:alpine
-
-  traefik:
-    image: traefik
-    command: --web --docker --docker.domain=docker.localhost --logLevel=INFO --docker.exposedbydefault=false
+    container_name: crm-nats-production
     ports:
-      - "3000:80"
-      - "3001:8080"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /dev/null:/traefik.toml
+      - "4226:4222"
+
+  crm-redis:
+    image: redis:alpine
+    container_name: crm-redis-production
+    ports:
+      - "6382:6379"
