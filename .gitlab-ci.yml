@@ -23,6 +23,7 @@ build/staging:
     - git checkout master
     - git pull
     - sudo docker-compose -f docker/docker-compose-staging.yml up --build -d
+    - sudo docker push registry.solazu.net/enterprise/crm/backend-services/service-core:staging
     - sudo docker-compose -f docker/docker-compose-production.yml build
     - sudo docker push registry.solazu.net/enterprise/crm/backend-services/service-core:production
   only:
