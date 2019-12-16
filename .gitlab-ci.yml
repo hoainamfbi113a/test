@@ -10,6 +10,8 @@ build/testing:
     - git checkout develop
     - git pull
     - sudo docker-compose -f docker/docker-compose-crm-testing.yml up --build -d
+    - sudo docker push registry.solazu.net/enterprise/crm/backend-services/service-core:testing
+    - sudo docker-compose build
     - sudo docker push registry.solazu.net/enterprise/crm/backend-services/service-core:latest
   only:
     - develop
