@@ -2,9 +2,10 @@
 import { Context, ServiceSchema } from "moleculer";
 import { Action, Method } from "moleculer-decorators";
 import { IMailNotification } from 'Interfaces';
-import { User } from "../src/models";
+import { ModelMailTemplate } from "../src/models";
 import { MailService } from "BaseService/services/mail.service";
 import BaseServiceConfig from "BaseService/config/envs/index";
+import { QueryCondition } from "base-service/dist/interfaces/iModel";
 
 class MailNotificationService implements ServiceSchema {
   public name: string = 'mail-notification';
@@ -15,24 +16,40 @@ class MailNotificationService implements ServiceSchema {
   })
 
   public async sendMailActiveOrg(ctx: Context<IMailNotification.ISendMailActiveOrgInput>) {
-    return this.sendVerificationMail(ctx.params.user, ctx.params.redirectUrl);
+    let mailTemplateModel = new ModelMailTemplate(ctx, null, true);
+    let query = new QueryCondition('type', '=', 'signUp');
+    let mailTemplate = await mailTemplateModel.findByQuery([query], ['*']);
+    let message = this.attachTemplateValue(mailTemplate.body, [
+      {
+        key: 'email',
+        value: ctx.params.user.email
+      },
+      {
+        key: 'link',
+        value: `${process.env.URL_CREATE_ORG}${ctx.params.redirectUrl}?verify_code=${ctx.params.user.verify_code}&email=${ctx.params.user.email}&orgId=${ctx.params.user.org_id}`
+      }
+    ]);
+    let from = BaseServiceConfig.MailService.user;
+    let to = ctx.params.user.email;
+    this.sendMail(from, to, mailTemplate.subject, message);
   }
 
   @Method
-  private sendVerificationMail(orgUser: User, redirectUrl: string = 'verify') {
+  private attachTemplateValue(template: string, keyValuePairs: any[]) {
+    for (const keyValue of keyValuePairs) {
+      template = template.replace(new RegExp(`{{${keyValue.key}}}`, 'g'), keyValue.value);
+    }
+    return template;
+  }
+
+  @Method
+  private sendMail(from: string, to: string, subject: string, message: string) {
     let mailService = new MailService(null);
-    let verificationEmailSubject = 'Kích hoạt tài khoản';
-    let message = mailService.template(
-      {
-        type: 'signUp',
-        email: orgUser.email,
-        link: `${process.env.URL_CREATE_ORG}${redirectUrl}?verify_code=${orgUser.verify_code}&email=${orgUser.email}&orgId=${orgUser.org_id}`
-      });
     mailService.sendMail(
       {
-        'from': BaseServiceConfig.MailService.user,
-        'to': orgUser.email,
-        'subject': verificationEmailSubject,
+        'from': from,
+        'to': to,
+        'subject': subject,
         'message': message
       });
   }
