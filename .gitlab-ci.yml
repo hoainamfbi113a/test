@@ -6,6 +6,7 @@ build/testing:
   tags:
     - dc/crm-dev-api
   script:
+    - ifconfig
     - cd /localsrc/gitlab-runner/apps/service-core
     - git checkout develop
     - git pull
