@@ -10,9 +10,9 @@ build/testing:
     - git checkout develop
     - git pull
     - sudo docker-compose -f docker/docker-compose-crm-testing.yml up --build -d
-    - sudo docker push registry.solazu.net/enterprise/crm/backend-services/service-core:testing
+    - sudo docker push registry.solazu.net/enterprise/saas-backend-core/service-core:testing
     - sudo docker-compose build
-    - sudo docker push registry.solazu.net/enterprise/crm/backend-services/service-core:latest
+    - sudo docker push registry.solazu.net/enterprise/saas-backend-core/service-core:latest
   only:
     - develop
 
@@ -25,8 +25,8 @@ build/staging:
     - git checkout master
     - git pull
     - sudo docker-compose -f docker/docker-compose-staging.yml up --build -d
-    - sudo docker push registry.solazu.net/enterprise/crm/backend-services/service-core:staging
+    - sudo docker push registry.solazu.net/enterprise/saas-backend-core/service-core:staging
     - sudo docker-compose -f docker/docker-compose-production.yml build
-    - sudo docker push registry.solazu.net/enterprise/crm/backend-services/service-core:production
+    - sudo docker push registry.solazu.net/enterprise/saas-backend-core/service-core:production
   only:
     - master
