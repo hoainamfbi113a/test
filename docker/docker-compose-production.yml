@@ -5,7 +5,7 @@ services:
     build:
       context: ./../
     container_name: crm-service-core-production
-    image: registry.solazu.net/enterprise/crm/backend-services/service-core:production
+    image: registry.solazu.net/enterprise/saas-backend-core/service-core:production
     env_file: ./../envs/.env.production
     ports:
       - "3011:3009"
