@@ -1,4 +1,5 @@
 import { Model } from 'BaseService/db/Model';
+import { QueryCondition } from 'base-service/dist/interfaces/iModel';
 
 export class User {
     public initOrg($id: string, $org_id: string, $email: string, $first_name: string, $last_name: string, $password: string, $phone_number: string, $verify_code: string) {
@@ -41,5 +42,28 @@ export class ModelUser extends Model<User> {
         return await this.select('*').where({
             email
         }).first();
+    }
+
+    public async isActiveVerifyCode(email: string, verifyCode: string): Promise<boolean> {
+        return await this.select('id').where({
+            email: email,
+            activated: true,
+            is_deleted: false,
+            verify_code: verifyCode
+        }).first();
+    }
+
+    public async updateUserPassword(email: string, verifyCode: string, newPassword: string): Promise<boolean> {
+        let query: QueryCondition[] = new Array<QueryCondition>(
+            new QueryCondition('email', '=', email),
+            new QueryCondition('activated', '=', true),
+            new QueryCondition('is_deleted', '=', false),
+            new QueryCondition('verify_code', '=', verifyCode),
+        );
+        let result = await this.update({ password: newPassword, verify_code: null }, query, ['id']);
+        if (!result || (result && result.length == 0)) {
+            return false;
+        }
+        return true;
     }
 }
