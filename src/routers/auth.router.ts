@@ -1,5 +1,5 @@
 export const authRouter = {
-    path: "/auth",
+    path: "/v2/auth",
     whitelist: [
         "auth.*",
         "user.*",
