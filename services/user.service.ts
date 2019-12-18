@@ -62,7 +62,7 @@ class UserService implements ServiceSchema {
 			throw new Errors.MoleculerError(error);
 		});
 		let response: IUser.CreateUserOutput = pluck<IUser.CreateUserOutput>(user, new IUser.CreateUserOutput());
-		this.sendVerificationMail(user, redirectUrl);
+		await ctx.call('mail-notification.sendMailActiveOrg', { user: user, redirectUrl: redirectUrl })
 		return response;
 	}
 
@@ -87,25 +87,6 @@ class UserService implements ServiceSchema {
 		return {
 			...user
 		}
-	}
-
-	@Method
-	private sendVerificationMail(orgUser: User, redirectUrl: string = 'verify') {
-		let mailService = new MailService(null);
-		let verificationEmailSubject = 'Kích hoạt tài khoản';
-		let message = mailService.template(
-			{
-				type: 'signUp',
-				email: orgUser.email,
-				link: `${process.env.URL_CREATE_ORG}${redirectUrl}?verify_code=${orgUser.verify_code}&email=${orgUser.email}&orgId=${orgUser.org_id}`
-			});
-		mailService.sendMail(
-			{
-				'from': BaseServiceConfig.MailService.user,
-				'to': orgUser.email,
-				'subject': verificationEmailSubject,
-				'message': message
-			});
 	}
 
 	@Method
