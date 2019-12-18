@@ -6,6 +6,7 @@ import { ModelMailTemplate } from "../src/models";
 import { MailService } from "BaseService/services/mail.service";
 import BaseServiceConfig from "BaseService/config/envs/index";
 import { QueryCondition } from "base-service/dist/interfaces/iModel";
+import { MailTemplateType } from "BaseService/constant/enum";
 
 class MailNotificationService implements ServiceSchema {
   public name: string = 'mail-notification';
@@ -14,11 +15,12 @@ class MailNotificationService implements ServiceSchema {
     params: IMailNotification.SendMailActiveOrgSchema,
     visibility: "public"
   })
-
   public async sendMailActiveOrg(ctx: Context<IMailNotification.ISendMailActiveOrgInput>) {
     let mailTemplateModel = new ModelMailTemplate(ctx, null, true);
-    let query = new QueryCondition('type', '=', 'signUp');
-    let mailTemplate = await mailTemplateModel.findByQuery([query], ['*']);
+    let mailTemplate = await mailTemplateModel.getByType(MailTemplateType.SIGN_UP);
+    if (!mailTemplate) {
+      throw "Mail template is not existed";
+    }
     let message = this.attachTemplateValue(mailTemplate.body, [
       {
         key: 'email',
@@ -31,6 +33,32 @@ class MailNotificationService implements ServiceSchema {
     ]);
     let from = BaseServiceConfig.MailService.user;
     let to = ctx.params.user.email;
+    this.sendMail(from, to, mailTemplate.subject, message);
+  }
+
+  @Action({
+    params: IMailNotification.SendMailForgotPasswordSchema,
+    visibility: "public"
+  })
+  public async sendForgotPasswordEmail(ctx: Context<IMailNotification.ISendMailForgotPasswordInput>) {
+    const { email, redirectUrl, verifyCode } = ctx.params;
+    let mailTemplateModel = new ModelMailTemplate(ctx, null, true);
+    let mailTemplate = await mailTemplateModel.getByType(MailTemplateType.FORGOT_PASSWORD);
+    if (!mailTemplate) {
+      throw "This mail template was not existed";
+    }
+    let message = this.attachTemplateValue(mailTemplate.body, [
+      {
+        key: 'email',
+        value: email
+      },
+      {
+        key: 'link',
+        value: `${process.env.URL_CREATE_ORG}${redirectUrl}?verify_code=${verifyCode}&email=${email}`
+      }
+    ]);
+    let from = BaseServiceConfig.MailService.user;
+    let to = email;
     this.sendMail(from, to, mailTemplate.subject, message);
   }
 
