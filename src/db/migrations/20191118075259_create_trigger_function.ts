@@ -3,7 +3,7 @@ import * as Knex from "knex";
 const tableName = "organization";
 const trigger_function_name = "manage_pg_user";
 const trigger_name = "insert_delete_update_org";
-export async function up(knex: Knex): Promise<any> {
+export async function up(knex: any): Promise<any> {
   await knex.raw(`
   CREATE FUNCTION public.${trigger_function_name} ()
   RETURNS TRIGGER
@@ -55,7 +55,7 @@ BEGIN
   RETURN NULL;
 END;
 $BODY$;
-ALTER FUNCTION public.${trigger_function_name} () OWNER TO postgres;
+ALTER FUNCTION public.${trigger_function_name} () OWNER TO "${knex.context.client.config.connection.user}";
   `)
   await knex.raw(`CREATE TRIGGER ${trigger_name}
                   AFTER INSERT OR DELETE OR UPDATE
