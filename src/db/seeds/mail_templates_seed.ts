@@ -1,7 +1,7 @@
 import * as Knex from "knex";
 exports.seed = (knex: Knex) => seed(knex);
 const tableName = 'mail_templates';
-async function seed(knex: Knex) {
+export async function seed(knex: Knex) {
   await knex(tableName).del();
   await knex(tableName).insert({
     type: 'signUp',

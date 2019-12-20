@@ -1,5 +1,5 @@
 import * as Knex from "knex";
-
+import { seed } from "../seeds/mail_templates_seed";
 const tableName = "mail_templates";
 export async function up(knex: Knex): Promise<any> {
   await knex.schema.createTable(`${tableName}`, (table) => {
@@ -10,6 +10,7 @@ export async function up(knex: Knex): Promise<any> {
     table.timestamp("created_at").notNullable().defaultTo(knex.fn.now());
     table.timestamp("updated_at").notNullable().defaultTo(knex.fn.now());
   });
+  await seed(knex);
 }
 
 
