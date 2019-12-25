@@ -8,7 +8,7 @@ services:
     image: registry.solazu.net/enterprise/saas-backend-core/service-core:testing
     env_file: ./../envs/.env.testing
     ports:
-      - "3009:3009"
+      - "3005:3009"
     environment:
       PORT: 3009
     links:
