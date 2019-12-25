@@ -9,5 +9,5 @@ RUN ssh-agent /bin/sh -c 'ssh-add /root/.ssh/id_rsa'
 RUN echo -e "\nStrictHostKeyChecking no" >> /root/.ssh/config
 COPY . .
 RUN yarn install
-RUN yarn build && npm prune --production
-CMD ["npm", "start"]
+RUN yarn build
+CMD ["yarn", "start"]
