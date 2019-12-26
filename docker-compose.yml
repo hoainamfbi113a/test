@@ -5,7 +5,7 @@ services:
     build:
       context: .
     container_name: service-core-api
-    image: registry.solazu.net/enterprise/crm/backend-services/service-core
+    image: registry.solazu.net/enterprise/saas-backend-core/service-core
     restart: always
     env_file: envs/.env.development
     ports:

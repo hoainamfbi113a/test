@@ -29,7 +29,7 @@ class PluginService implements ServiceSchema {
 		params: IPlugin.GetPluginInputSchema,
 		rest: 'GET /getOrgPlugins'
 	})
-	public async getOrgPlugins(ctx: Context<IPlugin.IGetOrgPluginInput>): Promise<IPlugin.IGetOrgPluginOutput> {
+	public async getOrgPlugins(ctx: Context<IPlugin.IGetOrgPluginInput>): Promise<IPlugin.IGetOrgPluginOutput[]> {
 		let model = new ModelOrgPlugin(ctx);
 		let params: IPlugin.IGetOrgPluginInput = ctx.params || {
 			page: 1,

@@ -1,5 +1,5 @@
 export const authRouter = {
-    path: "/auth",
+    path: "/v2/auth",
     whitelist: [
         "auth.*",
         "user.*",
@@ -10,7 +10,10 @@ export const authRouter = {
         "POST login": "auth.login",
         "POST user/registerByOrg": "org.create",
         "POST user/activeByOrg": "org.activate",
-        "POST user/checkEmailExist": "user.checkEmailExist"
+        "POST user/checkEmailExist": "user.checkEmailExist",
+        "POST user/forgotPassword": "user.forgotPassword",
+        "POST user/checkUserVerifyCode": "user.checkUserVerifyCode",
+        "POST user/resetPassword": "user.resetPassword"
     },
     bodyParsers: {
         json: true

@@ -1,33 +1,45 @@
 //#region Global Imports
-import { Context, ServiceSchema, Errors } from "moleculer";
-import { Action } from "moleculer-decorators";
-import { IAuth } from 'Interfaces';
-import { ModelOrganization, ModelUser } from "../src/models";
 import jwtService from "BaseService/services/jwt.service";
+import { IAuth } from "Interfaces";
+import {Context, Errors, ServiceSchema} from "moleculer";
+import { Action } from "moleculer-decorators";
+import { ModelOrganization, ModelUser } from "../src/models";
 
 class AuthService implements ServiceSchema {
-    public name: string = 'auth';
+    public name: string = "auth";
 
     @Action({
         params: {
             email: { type: "email" },
-            password: { type: "string", min: 1 }
+            password: { type: "string", min: 6 },
         },
     })
     public async login(ctx: Context<IAuth.Login>): Promise<any> {
         const { email, password } = ctx.params;
         const modelUser = new ModelUser(ctx);
-        let user = await modelUser.getUserByEmail(email);
+        const user = await modelUser.getUserByEmail(email);
         if (!user) {
-            throw new Errors.MoleculerError('Email not register', 402);
+            return {
+                isError: true,
+                message: "Email not register",
+                code: "email_not_register",
+            };
         }
         if (!user.activated) {
-            throw new Errors.MoleculerError('user not active', 402);
+            return {
+                isError: true,
+                message: "user not active",
+                code: "user_not_active",
+            };
         }
 
-        let check = await jwtService.compare(password, user.password);
+        const check = await jwtService.compare(password, user.password);
         if (!check) {
-            throw new Errors.MoleculerError('Wrong password', 402);
+            return {
+                isError: true,
+                message: "Wrong password",
+                code: "wrong_password",
+            };
         }
 
         const orgModel = new ModelOrganization(ctx);
@@ -36,13 +48,14 @@ class AuthService implements ServiceSchema {
         const token = await jwtService.sign({
             id: user.id,
             email: user.email,
-            org_id: user.org_id
+            org_id: user.org_id,
         });
         delete user.password;
         return {
-            ...user,
+            isError: false,
+            userInfo: user,
             companyName: org.companyName,
-            token
+            token,
         };
     }
 }

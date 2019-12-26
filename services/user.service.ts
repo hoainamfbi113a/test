@@ -62,7 +62,7 @@ class UserService implements ServiceSchema {
 			throw new Errors.MoleculerError(error);
 		});
 		let response: IUser.CreateUserOutput = pluck<IUser.CreateUserOutput>(user, new IUser.CreateUserOutput());
-		this.sendVerificationMail(user, redirectUrl);
+		await ctx.call('mail-notification.sendMailActiveOrg', { user: user, redirectUrl: redirectUrl })
 		return response;
 	}
 
@@ -80,6 +80,9 @@ class UserService implements ServiceSchema {
 			conditions.push(new QueryCondition('org_id', '=', orgId));
 			let userModel = new ModelUser(ctx, trx);
 			user = await userModel.findByQuery(conditions);
+			if (!user) {
+				throw `User ${email} is not existed`;
+			}
 			delete user.password;
 			let activatedUser = this.activateUser(user, verifyCode);
 			await userModel.findAndUpdate(activatedUser.id, activatedUser);
@@ -89,23 +92,62 @@ class UserService implements ServiceSchema {
 		}
 	}
 
-	@Method
-	private sendVerificationMail(orgUser: User, redirectUrl: string = 'verify') {
-		let mailService = new MailService(null);
-		let verificationEmailSubject = 'Kích hoạt tài khoản';
-		let message = mailService.template(
-			{
-				type: 'signUp',
-				email: orgUser.email,
-				link: `${process.env.URL_CREATE_ORG}${redirectUrl}?verify_code=${orgUser.verify_code}&email=${orgUser.email}&orgId=${orgUser.org_id}`
-			});
-		mailService.sendMail(
-			{
-				'from': BaseServiceConfig.MailService.user,
-				'to': orgUser.email,
-				'subject': verificationEmailSubject,
-				'message': message
-			});
+	@Action({
+		params: IUser.ForgotPasswordInputSchema
+	})
+	public async forgotPassword(ctx: Context<IUser.IForgotPasswordInput>): Promise<any> {
+		const { email, redirectUrl } = ctx.params;
+		const baseModel = new Model(ctx);
+		let user: User;
+		let isSuccess = true;
+		await baseModel.openTransaction(async (trx: Knex.Transaction) => {
+			let userModel = new ModelUser(ctx, trx);
+			let conditions: Array<QueryCondition> = new Array<QueryCondition>();
+			conditions.push(new QueryCondition('email', '=', email));
+			let user = await userModel.findByQuery(conditions, ['id']);
+			if (!user || (user && !user.id)) {
+				throw new Errors.MoleculerClientError('This user was not existed');
+			}
+			user.verify_code = uuid.v4();
+			await userModel.update(user, conditions);
+			let response = await ctx.call('mail-notification.sendForgotPasswordEmail', { email: email, verifyCode: user.verify_code, redirectUrl: redirectUrl });
+			if (response instanceof Error) {
+				throw response;
+			}
+		}).catch((error) => {
+			console.log(error);
+			isSuccess = false;
+		})
+		return isSuccess;
+	}
+
+	@Action({
+		params: IUser.CheckUserVerifyCodeSchema
+	})
+	public async checkUserVerifyCode(ctx: Context<IUser.ICheckUserVerifyCodeInput>): Promise<any> {
+		const { email, verifyCode } = ctx.params;
+		let userModel = new ModelUser(ctx);
+		let user = await userModel.isActiveVerifyCode(email, verifyCode);
+		if (!user) {
+			return false;
+		}
+		return true;
+	}
+
+	@Action({
+		params: IUser.ResetPasswordSchema
+	})
+	public async resetPassword(ctx: Context<IUser.IResetPasswordInput>): Promise<any> {
+		const { email, verifyCode, password } = ctx.params;
+		let userModel = new ModelUser(ctx);
+		let user = await userModel.isActiveVerifyCode(email, verifyCode);
+		if (!user) {
+			return false;
+		}
+		let hashedPassword = await jwtService.hash(password);
+		let newPasswordUser = new User();
+		newPasswordUser.password = hashedPassword;
+		return await userModel.updateUserPassword(email, verifyCode, hashedPassword);
 	}
 
 	@Method

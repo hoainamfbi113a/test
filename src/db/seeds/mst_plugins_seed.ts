@@ -10,7 +10,7 @@ async function seed(knex: Knex) {
         await knex("mst_plugins").insert({
             id: pluginIds[i],
             name: `Plugin ${i}`,
-            key: `Key ${i}`,
+            key: `PluginDemo${i}`,
         });
     }
 }

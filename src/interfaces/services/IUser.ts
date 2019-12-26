@@ -16,6 +16,36 @@ export namespace IUser {
 		orgId: string;
 	}
 
+	export const ForgotPasswordInputSchema = {
+		email: { type: "email" },
+		redirectUrl: { type: "string" },
+		$$strict: true
+	}
+	export interface IForgotPasswordInput {
+		email: string;
+		redirectUrl: string;
+	}
+
+	export const CheckUserVerifyCodeSchema = {
+		email: { type: "email" },
+		verifyCode: { type: "uuid" },
+		$$strict: true
+	}
+	export interface ICheckUserVerifyCodeInput {
+		email: string;
+		verifyCode: string;
+	}
+
+	export const ResetPasswordSchema = {
+		...CheckUserVerifyCodeSchema,
+		password: { type: "string", min: 1 }
+	}
+	export interface IResetPasswordInput {
+		email: string;
+		verifyCode: string;
+		password: string;
+	}
+
 	export class CreateUserOutput {
 		org_id: string = null;
 		email: string = null;
