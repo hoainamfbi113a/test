@@ -23,9 +23,10 @@ build/staging:
     - dc/crm-stg-api
   script:
     - ifconfig
-    - cd /localsrc/gitlab-runner/apps/service-core
-    - git checkout master
-    - git pull
+    - cp /home/slz-admin/.ssh/id_rsa .
+    # - cd /localsrc/gitlab-runner/apps/service-core
+    # - git checkout master
+    # - git pull
     - sudo docker-compose -f docker/docker-compose-staging.yml up --build -d
     - sudo docker push registry.solazu.net/enterprise/saas-backend-core/service-core:staging
     - sudo docker-compose -f docker/docker-compose-production.yml build
