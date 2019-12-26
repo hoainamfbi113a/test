@@ -27,4 +27,4 @@ build/staging:
     - sudo docker-compose -f docker/docker-compose-production.yml build
     - sudo docker push registry.solazu.net/enterprise/saas-backend-core/service-core:production
   only:
-    - test-ci
+    - master
