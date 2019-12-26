@@ -7,8 +7,9 @@ services:
     container_name: crm-service-core-staging
     image: registry.solazu.net/enterprise/saas-backend-core/service-core:staging
     env_file: ./../envs/.env.staging
+    restart: always
     ports:
-      - "3010:3009"
+      - "3005:3009"
     environment:
       PORT: 3010
     links:

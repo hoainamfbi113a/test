@@ -7,8 +7,9 @@ services:
     container_name: crm-service-core-production
     image: registry.solazu.net/enterprise/saas-backend-core/service-core:production
     env_file: ./../envs/.env.production
+    restart: always
     ports:
-      - "3011:3009"
+      - "3005:3009"
     environment:
       PORT: 3011
     links:
