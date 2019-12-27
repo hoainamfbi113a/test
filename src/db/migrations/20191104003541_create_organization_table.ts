@@ -3,7 +3,6 @@ import * as Knex from "knex";
 const tableName = "organization";
 export async function up(knex: Knex): Promise<any> {
     if (!await knex.schema.hasTable(tableName)) {
-        await knex.raw('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
         knex.schema.alterTable(tableName, (table) => {
             table.timestamp("created_at").notNullable().defaultTo(knex.fn.now());
             table.timestamp("updated_at").notNullable().defaultTo(knex.fn.now());

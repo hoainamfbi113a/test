@@ -3,7 +3,6 @@ import * as Knex from "knex";
 const tableName = "package";
 export async function up(knex: Knex): Promise<any> {
     if (!await knex.schema.hasTable(tableName)) {
-        await knex.raw('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
         await knex.schema.createTable(`${tableName}`, (table) => {
             table.uuid("id").unique().notNullable().primary().defaultTo(knex.raw("uuid_generate_v4()"));
             table.string("name");
