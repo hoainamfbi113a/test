@@ -24,7 +24,7 @@ class PluginService implements ServiceSchema {
 			order: {}
 		};
 		let offset = (params.page - 1) * params.pageSize;
-		return await model.queryByConditions(params.where, params.order);
+		return await model.queryByConditions(params.where, params.order, params.pageSize, offset);
 	}
 
 	@Action({
