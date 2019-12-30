@@ -5,26 +5,20 @@ import { Action } from "moleculer-decorators";
 import { IPlugin } from 'Interfaces';
 import { ModelMstPlugin, ModelOrgPlugin, MstPlugin, OrgPlugin } from "../src/models";
 import { Model } from "BaseService/db/Model";
+import { GetAllSchema, IGetAllInput } from "BaseService/services/base.validator";
 
 class PluginService implements ServiceSchema {
 	public name: string = 'plugin';
 	public dependencies: Array<string> = ['user'];
 
 	@Action({
-		params: IPlugin.GetPluginInputSchema,
+		params: GetAllSchema,
 		rest: 'GET /getAllMaster'
 	})
-	public async getAllMaster(ctx: Context<IPlugin.IGetMstPluginInput>): Promise<IPlugin.IGetMstPluginOutput[]> {
+	public async getAllMaster(ctx: Context<IGetAllInput>): Promise<IPlugin.IGetMstPluginOutput[]> {
 		let model = new ModelMstPlugin(ctx, null, true);
-		let params: IPlugin.IGetMstPluginInput = ctx.params || {
-			page: 1,
-			pageSize: 20,
-			transaction: null,
-			where: [],
-			order: {}
-		};
-		let offset = (params.page - 1) * params.pageSize;
-		return await model.queryByConditions(params.where, params.order, params.pageSize, offset);
+		let params = ctx.params
+		return await model.queryByConditions(params.where, params.order, params.pageSize, params.pageIndex);
 	}
 
 	@Action({
