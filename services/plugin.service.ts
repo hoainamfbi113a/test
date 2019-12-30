@@ -14,15 +14,17 @@ class PluginService implements ServiceSchema {
 		params: IPlugin.GetPluginInputSchema,
 		rest: 'GET /getAllMaster'
 	})
-	public async getAllMaster(ctx: Context<IPlugin.IGetMstPluginInput>): Promise<IPlugin.IGetMstPluginOutput> {
+	public async getAllMaster(ctx: Context<IPlugin.IGetMstPluginInput>): Promise<IPlugin.IGetMstPluginOutput[]> {
 		let model = new ModelMstPlugin(ctx, null, true);
 		let params: IPlugin.IGetMstPluginInput = ctx.params || {
 			page: 1,
 			pageSize: 20,
-			transaction: null
+			transaction: null,
+			where: [],
+			order: {}
 		};
 		let offset = (params.page - 1) * params.pageSize;
-		return await model.getAll(params.pageSize, offset, ['id', 'name', 'key']);
+		return await model.getByQuery(params.where, params.order);
 	}
 
 	@Action({
