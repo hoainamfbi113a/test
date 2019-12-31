@@ -53,8 +53,8 @@ class AuthService implements ServiceSchema {
         delete user.password;
         return {
             isError: false,
-            userInfo: user,
-            companyName: org.companyName,
+            userInfo: {...user, companyName: user.company_name},
+            companyName: org.company_name,
             token,
         };
     }
