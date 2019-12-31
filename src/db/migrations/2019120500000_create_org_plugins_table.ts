@@ -3,7 +3,6 @@ import * as Knex from "knex";
 const tableName = "org_plugins";
 export async function up(knex: Knex): Promise<any> {
     if (!await knex.schema.hasTable(tableName)) {
-        await knex.raw('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
         await knex.schema.createTable(`${tableName}`, (table) => {
             table.primary(["id"]);
             table.uuid("id").notNullable().defaultTo(knex.raw("uuid_generate_v4()"));

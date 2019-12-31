@@ -7,8 +7,9 @@ services:
     container_name: service-core-crm
     image: registry.solazu.net/enterprise/saas-backend-core/service-core:testing
     env_file: ./../envs/.env.testing
+    restart: always
     ports:
-      - "3009:3009"
+      - "3005:3009"
     environment:
       PORT: 3009
     links:
@@ -19,11 +20,13 @@ services:
   crm-nats:
     image: nats
     container_name: crm-nats
+    restart: always
     ports:
       - "4224:4222"
 
   crm-redis:
     image: redis:alpine
     container_name: crm-redis
+    restart: always
     ports:
       - "6380:6379"

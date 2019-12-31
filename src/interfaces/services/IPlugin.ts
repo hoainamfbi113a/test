@@ -1,4 +1,4 @@
-import { IBaseServiceQuery } from "BaseService/interfaces/common";
+import { IBaseServiceQuery, IGenericQuery } from "BaseService/interfaces/common";
 
 export namespace IPlugin {
 	export const GetPluginInputSchema = {
@@ -7,7 +7,7 @@ export namespace IPlugin {
 		$$strict: true
 	}
 
-	export interface IGetMstPluginInput extends IBaseServiceQuery {
+	export interface IGetMstPluginInput extends IBaseServiceQuery, IGenericQuery {
 		page: number;
 		pageSize: number;
 	}

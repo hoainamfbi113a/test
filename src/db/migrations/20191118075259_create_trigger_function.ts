@@ -5,7 +5,7 @@ const trigger_function_name = "manage_pg_user";
 const trigger_name = "insert_delete_update_org";
 export async function up(knex: any): Promise<any> {
   await knex.raw(`
-  CREATE FUNCTION public.${trigger_function_name} ()
+  CREATE OR REPLACE FUNCTION public.${trigger_function_name} ()
   RETURNS TRIGGER
   LANGUAGE 'plpgsql'
   NOT LEAKPROOF
@@ -57,6 +57,7 @@ END;
 $BODY$;
 ALTER FUNCTION public.${trigger_function_name} () OWNER TO "${knex.context.client.config.connection.user}";
   `)
+  await knex.raw(`DROP TRIGGER IF EXISTS ${trigger_name} ON public.${tableName}`);
   await knex.raw(`CREATE TRIGGER ${trigger_name}
                   AFTER INSERT OR DELETE OR UPDATE
                   ON public.${tableName}

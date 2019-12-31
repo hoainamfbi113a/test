@@ -6,6 +6,7 @@ export const apiRouter = {
         "**",
     ],
     aliases: {
+        "actions": "$node.actions"
     },
     use: [compression()],
     bodyParsers: {
