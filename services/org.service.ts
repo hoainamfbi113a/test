@@ -8,7 +8,7 @@ import { Model } from "BaseService/db/Model";
 import Knex = require("knex");
 
 class OrgService implements ServiceSchema {
-	public name: string = 'api/org';
+	public name: string = 'org';
 
 	@Action()
 	public async activate(ctx: Context<IOrg.IActivateOrgInput>): Promise<any> {

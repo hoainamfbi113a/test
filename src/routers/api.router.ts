@@ -1,6 +1,6 @@
 import compression from "compression";
 export const apiRouter = {
-    path: "/v2",
+    path: "/v2/api",
     whitelist: [
         // Access to any actions in all services under "/api" URL
         "**",

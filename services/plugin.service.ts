@@ -8,7 +8,7 @@ import { Model } from "BaseService/db/Model";
 import { GetAllSchema, IGetAllInput } from "BaseService/services/base.validator";
 
 class PluginService implements ServiceSchema {
-	public name: string = 'api/plugin';
+	public name: string = 'plugin';
 	public dependencies: Array<string> = ['user'];
 
 	@Action({
