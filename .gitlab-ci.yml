@@ -6,7 +6,7 @@ build/testing:
   tags:
     - dc/crm-dev-api
   script:
-    - ifconfig
+    - ifconfig ens160
     - cp /home/slz-admin/.ssh/id_rsa .
     - sudo docker-compose -f docker/docker-compose-crm-testing.yml up --build -d
     - sudo docker push registry.solazu.net/enterprise/saas-backend-core/service-core:testing
@@ -20,7 +20,7 @@ build/staging:
   tags:
     - dc/crm-stg-api
   script:
-    - ifconfig
+    - ifconfig ens160
     - cp /home/slz-admin/.ssh/id_rsa .
     - sudo docker-compose -f docker/docker-compose-staging.yml up --build -d
     - sudo docker push registry.solazu.net/enterprise/saas-backend-core/service-core:staging
