@@ -1,41 +1,54 @@
-import { Errors } from "moleculer";
 // @ts-ignore
 import jwtService from "BaseService/services/jwt.service";
-import { ModelUser, ModelOrganization } from "../models";
-
+import { Errors } from "moleculer";
+import { ModelOrganization, ModelUser } from "../models";
 const { UnAuthorizedError, ERR_NO_TOKEN } = require("BaseService/services/errors");
 
 class Middleware {
-    authentication = async (ctx: any, route: any, req: any, res: any) => {
+    public authentication = async (ctx: any, route: any, req: any, res: any) => {
         try {
-            console.log(req.query["test"]);
-            // Verify JWT token
-            const token = req.headers.token;
-            if (!token) {
-                return Promise.reject(new UnAuthorizedError(ERR_NO_TOKEN));
-            }
-            const data = await jwtService.verify(token);
-            const { payload } = data;
-            const modelUser = new ModelUser(ctx);
-            const modelOrg = new ModelOrganization(ctx);
-            let id = payload.id;
-            let orgID = payload.org_id;
-            const user = await modelUser.select('*').where({
-                id: id,
-                org_id: orgID
-            }).first();
-            if (!user) {
-                return Promise.reject(new UnAuthorizedError(ERR_NO_TOKEN));
-            } else {
+            // check app token
+            const appToken = req.headers["app-token"];
+            if (appToken) {
+                const data = await jwtService.verify(appToken);
+                const { payload } = data;
+                const orgID = payload.org_id;
+                const modelOrg = new ModelOrganization(ctx);
                 const org = await modelOrg.getOrgByID(orgID);
                 ctx.meta.isAuthencated = true;
-                ctx.meta.userInfo = user;
+                ctx.meta.userInfo = null;
                 ctx.meta.orgInfo = org;
-                ctx.meta.test = "456";
                 ctx.meta.method = req.method;
+                modelOrg.DB.destroy();
+            } else {
+                // Verify JWT token
+                const token = req.headers.token;
+                if (!token) {
+                    return Promise.reject(new UnAuthorizedError(ERR_NO_TOKEN));
+                }
+                const data = await jwtService.verify(token);
+                const { payload } = data;
+                const modelUser = new ModelUser(ctx);
+                const modelOrg = new ModelOrganization(ctx);
+                const id = payload.id;
+                const orgID = payload.org_id;
+                const user = await modelUser.select("*").where({
+                    id,
+                    org_id: orgID,
+                }).first();
+                if (!user) {
+                    modelUser.DB.destroy();
+                    return Promise.reject(new UnAuthorizedError(ERR_NO_TOKEN));
+                } else {
+                    const org = await modelOrg.getOrgByID(orgID);
+                    ctx.meta.isAuthencated = true;
+                    ctx.meta.userInfo = user;
+                    ctx.meta.orgInfo = org;
+                    ctx.meta.method = req.method;
+                }
+                modelUser.DB.destroy();
+                modelOrg.DB.destroy();
             }
-            modelUser.DB.destroy();
-            modelOrg.DB.destroy();
         } catch (error) {
             return Promise.reject(new Errors.MoleculerError(error.toString()));
         }
