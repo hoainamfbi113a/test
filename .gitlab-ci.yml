@@ -5,6 +5,9 @@ build/testing:
   stage: build
   tags:
     - dc/crm-dev-api
+  environment:
+    name: testing
+    url: https://api.test.mapp.vn/
   script:
     - ifconfig ens160
     - cp /home/slz-admin/.ssh/id_rsa .
@@ -19,6 +22,9 @@ build/staging:
   stage: build
   tags:
     - dc/crm-stg-api
+  environment:
+    name: staging
+    url: https://api.stg.mapp.vn/
   script:
     - ifconfig ens160
     - cp /home/slz-admin/.ssh/id_rsa .
@@ -28,3 +34,18 @@ build/staging:
     - sudo docker push registry.solazu.net/enterprise/saas-backend-core/service-core:production
   only:
     - staging
+
+build/production:
+  stage: build
+  tags:
+    - dc/crm-prd-api
+  environment:
+    name: production
+    url: https://api.mapp.vn/
+  when: manual
+  script:
+    - ifconfig ens160
+    - cp /home/slz-admin/.ssh/id_rsa .
+    - sudo docker-compose -f docker/docker-compose-production.yml up --build -d
+  only:
+    - release
