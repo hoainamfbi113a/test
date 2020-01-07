@@ -19,6 +19,12 @@ class Middleware {
                 ctx.meta.userInfo = null;
                 ctx.meta.orgInfo = org;
                 ctx.meta.method = req.method;
+                // Verify JWT token Contact
+                const token = req.headers.token;
+                if (token) {
+                    const dataContact = await jwtService.verify(token);
+                    ctx.meta.contact = dataContact.payload;
+                }
                 modelOrg.DB.destroy();
             } else {
                 // Verify JWT token
