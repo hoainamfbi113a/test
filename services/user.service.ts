@@ -5,16 +5,30 @@ import { IUser } from 'Interfaces';
 import { ModelUser, User } from "../src/models";
 import uuid = require('uuid');
 import { Model } from "BaseService/db/Model";
-import { MailService } from "BaseService/services/mail.service";
-import BaseServiceConfig from "BaseService/config/envs/index";
 import { QueryCondition } from "BaseService/interfaces/iModel";
 import jwtService from "BaseService/services/jwt.service";
 import { pluck } from "BaseService/lib/utils";
+import { GetAllSchema, IGetAllInput } from "BaseService/services/base.validator";
 import Knex = require("knex");
 
 class UserService implements ServiceSchema {
 	public name: string = 'user';
-
+	@Action({
+		params: GetAllSchema,
+		rest: "POST /list"
+	})
+	public async getAllUsers(ctx: Context<IGetAllInput>) {
+		let model: ModelUser = new ModelUser(ctx);
+		let params = ctx.params;
+		let additionalCondition = {
+			"is_deleted": {
+				"$eq": false
+			}
+		}
+		params.where = params.where ? params.where : [];
+		params.where.push(additionalCondition);
+		return await model.getAllByConditions(params.where, params.order, params.pageSize, params.pageIndex);
+	}
 
 	@Action({
 		body: {
