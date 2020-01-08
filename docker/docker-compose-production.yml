@@ -11,7 +11,7 @@ services:
     ports:
       - "3005:3009"
     environment:
-      PORT: 3011
+      PORT: 3009
     links:
       - crm-nats
     depends_on:
@@ -27,4 +27,4 @@ services:
     image: redis:alpine
     container_name: crm-redis-production
     ports:
-      - "6382:6379"
+      - "6381:6379"
