@@ -5,7 +5,7 @@ import * as path from "path";
 import { IFile } from "Interfaces";
 import { Context, ServiceSchema } from "moleculer";
 import { Action } from "moleculer-decorators";
-import { FileUpload, ModelFileUpload } from "src/models/ModelFileUpload";
+import { FileUpload, ModelFileUpload } from "../src/models/ModelFileUpload";
 import uuid = require("uuid");
 
 class FileService implements ServiceSchema {
