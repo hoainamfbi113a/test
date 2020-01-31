@@ -18,7 +18,7 @@ class FileService implements ServiceSchema {
       return false;
     }
     let fileData: any = null;
-    ctx.params.on("data", (data: any) => {
+    await ctx.params.on("data", (data: any) => {
       fileData = data;
     });
     if (!fileData) {
