@@ -21,6 +21,9 @@ class FileService implements ServiceSchema {
     ctx.params.on("data", (data: any) => {
       fileData = data;
     });
+    if (!fileData) {
+      return false;
+    }
     const baseModel = new Model(ctx);
     const directory = `${process.cwd()}/public/uploads/${ctx.meta.orgInfo.id}`;
     const fileName = ctx.meta.filename
@@ -33,7 +36,7 @@ class FileService implements ServiceSchema {
         fileUpload.file_name = fileName;
         fileUpload.physical_path = `${directory}/${fileName}`;
         fileUpload.relative_url = path.relative("./", fileUpload.physical_path);
-        result = await fileUploadModel.insert(fileUpload, ["*"]);
+        result = (await fileUploadModel.insert(fileUpload, ["*"]))[0];
         fs.mkdirSync(directory, { recursive: true });
         fs.writeFileSync(fileUpload.physical_path, fileData);
       })
