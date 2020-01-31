@@ -16,6 +16,8 @@ services:
       - crm-nats
     depends_on:
       - crm-nats
+    volumes:
+      - /localsrc/uploads-data-v2:/app/public/uploads
 
   crm-nats:
     image: nats
