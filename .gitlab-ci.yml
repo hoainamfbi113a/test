@@ -4,7 +4,7 @@ stages:
 build/testing:
   stage: build
   tags:
-    - dc/crm-dev-api
+    - dc/crm-test-api
   environment:
     name: testing
     url: https://api.test.mapp.vn/
