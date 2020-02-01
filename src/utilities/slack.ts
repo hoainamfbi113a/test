@@ -1,6 +1,5 @@
 // @ts-ignore
-// import { SlackLogger } from "../node_modules/node-slack-logs/dist";
-import { SlackLogger } from '../../node_modules/node-slack-logs/dist' 
+import { SlackLogger } from 'node-slack-logs/dist' 
 const envConfig = process.env;
 
 export default class SlackConfig {
