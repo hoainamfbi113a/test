@@ -25,13 +25,13 @@
         "src/interfaces/"
       ],
       "BaseService/*": [
-        "node_modules/base-service/dist/*"
+        "node_modules/@enterprise/saas-base-service/dist/*"
       ],
       "BaseService": [
-        "node_modules/base-service/dist"
+        "node_modules/@enterprise/saas-base-service/dist"
       ],
       "BaseServiceModule/*": [
-        "node_modules/base-service/node_modules/*"
+        "node_modules/@enterprise/saas-base-service/node_modules/*"
       ]
     }
   },
