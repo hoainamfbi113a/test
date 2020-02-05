@@ -1,5 +1,3 @@
-
-import { QueryCondition } from "base-service/dist/interfaces/iModel";
 import BaseServiceConfig from "BaseService/config/envs/index";
 import { MailTemplateType } from "BaseService/constant/enum";
 import { MailService } from "BaseService/services/mail.service";
@@ -15,9 +13,13 @@ class MailNotificationService implements ServiceSchema {
     params: IMailNotification.SendMailActiveOrgSchema,
     visibility: "public",
   })
-  public async sendMailActiveOrg(ctx: Context<IMailNotification.ISendMailActiveOrgInput>) {
+  public async sendMailActiveOrg(
+    ctx: Context<IMailNotification.ISendMailActiveOrgInput>,
+  ) {
     const mailTemplateModel = new ModelMailTemplate(ctx, null, true);
-    const mailTemplate = await mailTemplateModel.getByType(MailTemplateType.SIGN_UP);
+    const mailTemplate = await mailTemplateModel.getByType(
+      MailTemplateType.SIGN_UP,
+    );
     if (!mailTemplate) {
       throw new Error("Mail template is not existed");
     }
@@ -40,10 +42,14 @@ class MailNotificationService implements ServiceSchema {
     params: IMailNotification.SendMailForgotPasswordSchema,
     visibility: "public",
   })
-  public async sendForgotPasswordEmail(ctx: Context<IMailNotification.ISendMailForgotPasswordInput>) {
+  public async sendForgotPasswordEmail(
+    ctx: Context<IMailNotification.ISendMailForgotPasswordInput>,
+  ) {
     const { email, redirectUrl, verifyCode } = ctx.params;
     const mailTemplateModel = new ModelMailTemplate(ctx, null, true);
-    const mailTemplate = await mailTemplateModel.getByType(MailTemplateType.FORGOT_PASSWORD);
+    const mailTemplate = await mailTemplateModel.getByType(
+      MailTemplateType.FORGOT_PASSWORD,
+    );
     if (!mailTemplate) {
       throw new Error("This mail template was not existed");
     }
@@ -65,7 +71,10 @@ class MailNotificationService implements ServiceSchema {
   @Method
   private attachTemplateValue(template: string, keyValuePairs: any[]) {
     for (const keyValue of keyValuePairs) {
-      template = template.replace(new RegExp(`{{${keyValue.key}}}`, "g"), keyValue.value);
+      template = template.replace(
+        new RegExp(`{{${keyValue.key}}}`, "g"),
+        keyValue.value,
+      );
     }
     return template;
   }
@@ -73,13 +82,12 @@ class MailNotificationService implements ServiceSchema {
   @Method
   private sendMail(from: string, to: string, subject: string, message: string) {
     const mailService = new MailService(null);
-    mailService.sendMail(
-      {
-        from: from,
-        to: to,
-        subject: subject,
-        message: message,
-      });
+    mailService.sendMail({
+      from,
+      message,
+      subject,
+      to,
+    });
   }
 }
 
