@@ -1,5 +1,5 @@
 //#region Global Imports
-import { Model } from "base-service/dist/db/Model";
+import { Model } from "BaseService/db/Model";
 import * as fs from "fs";
 import * as path from "path";
 import { IFile } from "Interfaces";
@@ -12,7 +12,7 @@ class FileService implements ServiceSchema {
   public name: string = "file";
 
   @Action()
-  public async upload(ctx: Context<any>): Promise<any> {
+  public async upload(ctx: Context<any, any>): Promise<any> {
     let result = null;
     if (!ctx.meta.orgInfo || !ctx.meta.orgInfo.id) {
       return false;
