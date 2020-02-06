@@ -35,7 +35,7 @@ class FileService implements ServiceSchema {
         const fileUpload = new FileUpload();
         fileUpload.file_name = fileName;
         fileUpload.physical_path = `${directory}/${fileName}`;
-        fileUpload.relative_url = path.relative("./", fileUpload.physical_path);
+        fileUpload.relative_url = `/${path.relative("./", fileUpload.physical_path)}`
         result = (await fileUploadModel.insert(fileUpload, ["*"]))[0];
         fs.mkdirSync(directory, { recursive: true });
         fs.writeFileSync(fileUpload.physical_path, fileData);
