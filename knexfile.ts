@@ -1,3 +1,3 @@
-import knexfile from "base-service/dist/db/knexfile";
+import knexfile from "@enterprise/saas-base-service/dist/db/knexfile";
 
 module.exports = knexfile;
