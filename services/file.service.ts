@@ -2,11 +2,13 @@
 import { Model } from "BaseService/db/Model";
 import * as fs from "fs";
 import * as path from "path";
+const fsExtra = require("fs-extra");
 import { IFile } from "Interfaces";
 import { Context, ServiceSchema } from "moleculer";
-import { Action } from "moleculer-decorators";
+import { Action, Method } from "moleculer-decorators";
 import { FileUpload, ModelFileUpload } from "../src/models/ModelFileUpload";
 import uuid = require("uuid");
+import { getTargetUploadPath } from '../src/utilities/uploads'
 
 class FileService implements ServiceSchema {
   public name: string = "file";
@@ -25,7 +27,7 @@ class FileService implements ServiceSchema {
       return false;
     }
     const baseModel = new Model(ctx);
-    const directory = `${process.cwd()}/public/uploads/${ctx.meta.orgInfo.id}`;
+    const directory = `${process.cwd()}/public/temp/${ctx.meta.orgInfo.id}`;
     const fileName = ctx.meta.filename
       ? `${uuid.v4()}.${ctx.meta.filename}`
       : uuid.v4();
@@ -82,6 +84,29 @@ class FileService implements ServiceSchema {
         throw error;
       });
     return results;
+  }
+
+  @Action({
+    visibility: 'public'
+  })
+  private async moveImage(ctx: any) {
+    const { imgDir, imgName, target, pathArr = [] } = ctx.params
+    const orgId = ctx.meta.orgInfo.id
+    const imgPath = `${process.cwd()}/public${imgDir}`
+    const newImagePath = `/${getTargetUploadPath(orgId,target,pathArr)}/${imgName}`
+    await fsExtra.copy(imgPath, `${process.cwd()}/public${newImagePath}`)
+      .then(() => {
+        fsExtra.removeSync(imgPath)
+      })
+      .catch((err: any) => {
+        console.error(err)
+        throw new Error("Can't move image");
+      })
+    
+    return {
+      oldPath: imgPath,
+      newPath: newImagePath
+    }
   }
 }
 
