@@ -6,9 +6,9 @@ const fsExtra = require("fs-extra");
 import { IFile } from "Interfaces";
 import { Context, ServiceSchema } from "moleculer";
 import { Action, Method } from "moleculer-decorators";
-import { FileUpload, ModelFileUpload } from "../src/models/ModelFileUpload";
 import uuid = require("uuid");
-import { getTargetUploadPath } from '../src/utilities/uploads'
+import { FileUpload, ModelFileUpload } from "../src/models/ModelFileUpload";
+import { getTargetUploadPath } from "../src/utilities/uploads";
 
 class FileService implements ServiceSchema {
   public name: string = "file";
@@ -16,16 +16,11 @@ class FileService implements ServiceSchema {
   @Action()
   public async upload(ctx: Context<any, any>): Promise<any> {
     let result = null;
-    if (!ctx.meta.orgInfo || !ctx.meta.orgInfo.id) {
+    if (!ctx.meta.orgInfo || !ctx.meta.orgInfo.id || !ctx.meta.filename) {
+      await ctx.params.on("data", (data: any) => {});
       return false;
     }
-    let fileData: any = null;
-    await ctx.params.on("data", (data: any) => {
-      fileData = data;
-    });
-    if (!fileData) {
-      return false;
-    }
+
     const baseModel = new Model(ctx);
     const directory = `${process.cwd()}/public/temp/${ctx.meta.orgInfo.id}`;
     const fileName = ctx.meta.filename
@@ -37,10 +32,15 @@ class FileService implements ServiceSchema {
         const fileUpload = new FileUpload();
         fileUpload.file_name = fileName;
         fileUpload.physical_path = `${directory}/${fileName}`;
-        fileUpload.relative_url = `/${path.relative("./public", fileUpload.physical_path)}`
+        fileUpload.relative_url = `/${path.relative(
+          "./public",
+          fileUpload.physical_path,
+        )}`;
         result = (await fileUploadModel.insert(fileUpload, ["*"]))[0];
         fs.mkdirSync(directory, { recursive: true });
-        fs.writeFileSync(fileUpload.physical_path, fileData);
+        const writableStream = fs.createWriteStream(fileUpload.physical_path);
+        ctx.params.pipe(writableStream);
+        await ctx.params.on("data", (data: any) => {});
       })
       .catch((error) => {
         result = false;
@@ -87,26 +87,31 @@ class FileService implements ServiceSchema {
   }
 
   @Action({
-    visibility: 'public'
+    visibility: "public",
   })
   private async moveImage(ctx: any) {
-    const { imgDir, imgName, target, pathArr = [] } = ctx.params
-    const orgId = ctx.meta.orgInfo.id
-    const imgPath = `${process.cwd()}/public${imgDir}`
-    const newImagePath = `/${getTargetUploadPath(orgId,target,pathArr)}/${imgName}`
-    await fsExtra.copy(imgPath, `${process.cwd()}/public${newImagePath}`)
+    const { imgDir, imgName, target, pathArr = [] } = ctx.params;
+    const orgId = ctx.meta.orgInfo.id;
+    const imgPath = `${process.cwd()}/public${imgDir}`;
+    const newImagePath = `/${getTargetUploadPath(
+      orgId,
+      target,
+      pathArr,
+    )}/${imgName}`;
+    await fsExtra
+      .copy(imgPath, `${process.cwd()}/public${newImagePath}`)
       .then(() => {
-        fsExtra.removeSync(imgPath)
+        fsExtra.removeSync(imgPath);
       })
       .catch((err: any) => {
-        console.error(err)
+        console.error(err);
         throw new Error("Can't move image");
-      })
-    
+      });
+
     return {
+      newPath: newImagePath,
       oldPath: imgPath,
-      newPath: newImagePath
-    }
+    };
   }
 }
 
