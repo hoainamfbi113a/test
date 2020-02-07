@@ -44,7 +44,8 @@
     "ioredis": "^4.2.0",
     "node-slack-logs": "^1.0.3",
     "reflect-metadata": "^0.1.13",
-    "tsconfig-paths": "^3.9.0"
+    "tsconfig-paths": "^3.9.0",
+    "fs-extra": "^8.1.0"
   },
   "engines": {
     "node": ">= 8.x.x"
