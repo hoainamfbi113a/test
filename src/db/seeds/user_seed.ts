@@ -1,4 +1,4 @@
-import jwtService from "BaseService/services/jwt.service";
+import jwtService from "@enterprise/saas-base-service/dist/services/jwt.service";
 import * as Knex from "knex";
 exports.seed = (knex: Knex) => seed(knex);
 
