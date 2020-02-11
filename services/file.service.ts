@@ -89,15 +89,18 @@ class FileService implements ServiceSchema {
   @Action({
     visibility: "public",
   })
-  private async moveImage(ctx: any) {
-    const { imgDir, imgName, target, pathArr = [] } = ctx.params;
+  public async moveImage(ctx: any) {
+    const { imageId, target, pathArr = [] } = ctx.params;
+    const model = new ModelFileUpload(ctx);
+    const imageData = await model.findOne({ id: imageId });
+    if (!imageData) {
+      throw new Error("Image Not Found");
+    }
     const orgId = ctx.meta.orgInfo.id;
-    const imgPath = `${process.cwd()}/public${imgDir}`;
-    const newImagePath = `/${getTargetUploadPath(
-      orgId,
-      target,
-      pathArr,
-    )}/${imgName}`;
+    const imgPath = `${process.cwd()}/public${imageData.relative_url}`;
+    const newImagePath = `/${getTargetUploadPath(orgId, target, pathArr)}/${
+      imageData.file_name
+    }`;
     await fsExtra
       .copy(imgPath, `${process.cwd()}/public${newImagePath}`)
       .then(() => {
