@@ -40,12 +40,14 @@
   "dependencies": {
     "@types/compression": "^1.0.1",
     "@enterprise/saas-base-service": "*",
+    "@types/socket.io": "^2.1.4",
     "compression": "^1.7.4",
     "ioredis": "^4.2.0",
     "node-slack-logs": "^1.0.3",
     "reflect-metadata": "^0.1.13",
     "tsconfig-paths": "^3.9.0",
-    "fs-extra": "^8.1.0"
+    "fs-extra": "^8.1.0",
+    "@types/lodash": "^4.14.149"
   },
   "engines": {
     "node": ">= 8.x.x"
