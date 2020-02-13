@@ -44,7 +44,7 @@
     "./services/**/*.ts",
     "./test/**/*.ts",
     "./moleculer.config.ts",
-    "./mixin/socket.ts"
+    "./mixin/*.ts"
   ],
   "lib": ["es2017", "dom", "es2015"]
 }
