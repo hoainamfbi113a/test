@@ -10,7 +10,7 @@ services:
     restart: always
     ports:
       - "3005:3009"
-      - "4005:3007"
+      - "3007:3007"
     environment:
       PORT: 3009
     links:
