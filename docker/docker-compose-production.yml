@@ -30,4 +30,4 @@ services:
     image: redis:alpine
     container_name: crm-redis-production
     ports:
-      - "6381:6379"
+      - "6382:6379"
