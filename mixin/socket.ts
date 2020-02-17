@@ -4,14 +4,15 @@ const { match } = require("moleculer").Utils;
 const { ServiceNotFoundError } = require("moleculer").Errors;
 const { BadRequestError } = require("./errors");
 const chalk = require("chalk");
-
 export = {
   name: "io",
   settings: {
     port: 3007,
     server: true,
     io: {
-      // options: {}, //socket.io options
+      options: {
+        adapter: require("socket.io-redis")(process.env.CACHER),
+      },
       namespaces: {
         "/": {
           authorization: true,
