@@ -6,6 +6,7 @@ import { Context, Errors, ServiceSchema } from "moleculer";
 import { Action } from "moleculer-decorators";
 import uuid = require("uuid");
 import { ModelOrganization, Organization } from "../src/models";
+import { isMaster } from "cluster";
 
 class OrgService implements ServiceSchema {
   public name: string = "org";
@@ -118,6 +119,24 @@ class OrgService implements ServiceSchema {
       email: createdUser.email,
       isError: false,
     };
+  }
+
+  @Action({
+    visibility: "public",
+  })
+  public async getOrgById(ctx: Context<any, any>): Promise<any> {
+    const { id } = ctx.params as any;
+    const modelOrg = new ModelOrganization(ctx, null, true);
+    return await modelOrg.findOne({ id, is_deleted: false, is_active: true });
+  }
+
+  @Action({
+    visibility: "public",
+  })
+  public async updateOrgById(ctx: Context<any, any>): Promise<any> {
+    const { id, data } = ctx.params as any;
+    const modelOrg = new ModelOrganization(ctx, null, true);
+    return await modelOrg.updateByCondition({ id }, data);
   }
 }
 
