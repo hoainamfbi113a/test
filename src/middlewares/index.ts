@@ -22,6 +22,11 @@ class Middleware {
         ctx.meta.userInfo = null;
         ctx.meta.orgInfo = org;
         ctx.meta.method = req.method;
+        ctx.meta.clientIp =
+          req.headers["x-forwarded-for"] ||
+          req.connection.remoteAddress ||
+          req.socket.remoteAddress ||
+          req.connection.socket.remoteAddress;
         // Verify JWT token Contact
         const token = req.headers.token;
         if (token) {
@@ -58,6 +63,11 @@ class Middleware {
           ctx.meta.userInfo = user;
           ctx.meta.orgInfo = org;
           ctx.meta.method = req.method;
+          ctx.meta.clientIp =
+            req.headers["x-forwarded-for"] ||
+            req.connection.remoteAddress ||
+            req.socket.remoteAddress ||
+            req.connection.socket.remoteAddress;
         }
         modelUser.DB.destroy();
         modelOrg.DB.destroy();
