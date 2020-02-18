@@ -50,13 +50,8 @@ class AuthService implements ServiceSchema {
       id: user.id,
       org_id: user.org_id,
     });
-    const appToken = await jwtService.sign({
-      app_id: "98eba6cd-4e2e-4988-a7cb-8321e49b73d3",
-      org_id: "0314b535-b76d-4a79-af28-4deb8ea9b99f",
-    });
     delete user.password;
     return {
-      appToken,
       companyName: org.company_name,
       isError: false,
       token,
