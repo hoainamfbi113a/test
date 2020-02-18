@@ -13,10 +13,8 @@ services:
     environment:
       PORT: 3000
     links:
-      - nats
       - postgresdocker
     depends_on:
-      - nats
       - postgresdocker
     labels:
       - "traefik.enable=true"
@@ -37,16 +35,6 @@ services:
       - "5431:5432"
     volumes:
       - ./docker/postgres-data:/var/lib/postgresql/data:cached
-
-  nats:
-    image: nats
-    ports:
-     - "4222:4222"
-
-  redis:
-    image: redis:alpine
-    ports:
-      - "6378:6379"
 
   traefik:
     image: traefik

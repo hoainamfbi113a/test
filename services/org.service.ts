@@ -124,7 +124,7 @@ class OrgService implements ServiceSchema {
   @Action({
     visibility: "public",
   })
-  public async getOrgById(ctx: Context<any, any>): Promise<any> {
+  public async getOneOrgById(ctx: Context<any, any>): Promise<any> {
     const { id } = ctx.params as any;
     const modelOrg = new ModelOrganization(ctx, null, true);
     return await modelOrg.findOne({ id, is_deleted: false, is_active: true });
