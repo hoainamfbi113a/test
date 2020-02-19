@@ -16,26 +16,25 @@ class MailNotificationService implements ServiceSchema {
   public async sendMailActiveOrg(
     ctx: Context<IMailNotification.ISendMailActiveOrgInput>,
   ) {
-    const mailTemplateModel = new ModelMailTemplate(ctx, null, true);
-    const mailTemplate = await mailTemplateModel.getByType(
-      MailTemplateType.SIGN_UP,
+    const fullRedirectUrl = `${process.env.URL_CREATE_ORG}${ctx.params.redirectUrl}?verify_code=${ctx.params.user.verify_code}&email=${ctx.params.user.email}&orgId=${ctx.params.user.org_id}`;
+    const { from, to, subject, message } = await this.buildMailToSend(
+      ctx,
+      fullRedirectUrl,
     );
-    if (!mailTemplate) {
-      throw new Error("Mail template is not existed");
-    }
-    const message = this.attachTemplateValue(mailTemplate.body, [
-      {
-        key: "email",
-        value: ctx.params.user.email,
-      },
-      {
-        key: "link",
-        value: `${process.env.URL_CREATE_ORG}${ctx.params.redirectUrl}?verify_code=${ctx.params.user.verify_code}&email=${ctx.params.user.email}&orgId=${ctx.params.user.org_id}`,
-      },
-    ]);
-    const from = BaseServiceConfig.MailService.user;
-    const to = ctx.params.user.email;
-    this.sendMail(from, to, mailTemplate.subject, message);
+    this.sendMail(from, to, subject, message);
+  }
+  @Action({
+    visibility: "public",
+  })
+  public async sendMailActiveUser(
+    ctx: Context<IMailNotification.ISendMailActiveOrgInput>,
+  ) {
+    const fullRedirectUrl = `${process.env.URL_WEB_ADMIN}/${ctx.params.redirectUrl}?verify_code=${ctx.params.user.verify_code}&email=${ctx.params.user.email}`;
+    const { from, to, subject, message } = await this.buildMailToSend(
+      ctx,
+      fullRedirectUrl,
+    );
+    this.sendMail(from, to, subject, message);
   }
 
   @Action({
@@ -88,6 +87,38 @@ class MailNotificationService implements ServiceSchema {
       subject,
       to,
     });
+  }
+
+  @Method
+  private async buildMailToSend(
+    ctx: Context<IMailNotification.ISendMailActiveOrgInput>,
+    redirectUrl: string,
+  ) {
+    const mailTemplateModel = new ModelMailTemplate(ctx, null, true);
+    const mailTemplate = await mailTemplateModel.getByType(
+      MailTemplateType.SIGN_UP,
+    );
+    if (!mailTemplate) {
+      throw new Error("Mail template is not existed");
+    }
+    const message = this.attachTemplateValue(mailTemplate.body, [
+      {
+        key: "email",
+        value: ctx.params.user.email,
+      },
+      {
+        key: "link",
+        value: redirectUrl,
+      },
+    ]);
+    const from = BaseServiceConfig.MailService.user;
+    const to = ctx.params.user.email;
+    return {
+      from,
+      message,
+      subject: mailTemplate.subject,
+      to,
+    };
   }
 }
 

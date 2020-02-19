@@ -12,7 +12,7 @@ export class User {
   public phone_number: string;
   public verify_code: string;
   public team_id: string;
-  public permission: string;
+  public permission: any;
   public activated: boolean;
   public is_super: boolean;
   public is_deleted: boolean;
