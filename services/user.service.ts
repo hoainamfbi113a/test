@@ -86,6 +86,26 @@ class UserService implements ServiceSchema {
       )[0] || {}
     );
   }
+  @Action({
+    params: {
+      $$strict: true,
+      ids: { type: "array", items: "uuid" },
+    },
+    rest: "DELETE /delete-by-ids",
+  })
+  public async deleteByIds(ctx: Context<any>) {
+    const model: ModelUser = new ModelUser(ctx);
+
+    return {
+      deletedIds:
+        (
+          await model
+            .query()
+            .whereIn("id", ctx.params.ids)
+            .delete(["id"])
+        )?.map((item: any) => item.id) || [],
+    };
+  }
 
   @Action({
     body: {
