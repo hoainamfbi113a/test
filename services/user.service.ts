@@ -53,6 +53,39 @@ class UserService implements ServiceSchema {
       ],
     );
   }
+  @Action({
+    params: {
+      $$strict: true,
+      id: { type: "uuid" },
+    },
+    rest: "POST /get-one",
+  })
+  public async getOne(ctx: Context<any>) {
+    const model: ModelUser = new ModelUser(ctx);
+    return (
+      (
+        await model
+          .query()
+          .select([
+            "is_deleted",
+            "id",
+            "created_at",
+            "updated_at",
+            "org_id",
+            "email",
+            "first_name",
+            "last_name",
+            "phone_number",
+            "activated",
+            "is_super",
+            "verify_code",
+            "team_id",
+            "permission",
+          ])
+          .where({ id: ctx.params.id, is_deleted: false })
+      )[0] || {}
+    );
+  }
 
   @Action({
     body: {
